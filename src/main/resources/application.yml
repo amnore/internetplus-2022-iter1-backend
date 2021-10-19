@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: xzh
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 3
+      maximum-pool-size: 10
+      max-lifetime: 30000
+      connection-test-query: SELECT 1
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:dataImpl/*.xml
