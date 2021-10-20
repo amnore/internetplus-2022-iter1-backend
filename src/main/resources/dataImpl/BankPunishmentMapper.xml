@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.internetplus.bankpunishment.data.BankPunishmentMapper">
+    <insert id="insertBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment"
+            keyProperty="id"  useGeneratedKeys="true">
+      INSERT INTO bank_punishment(
+               punishmentName, punishmentDocNo,punishmentType,
+               punishedPartyName,mainResponsibleName, mainIllegalFact,
+               punishmentBasis,punishmentDecision,punisherName
+               ,punishDate,status)
+      VALUES (
+              #{bankPunishment.punishmentName},#{bankPunishment.punishmentDocNo},#{bankPunishment.punishmentType},
+              #{bankPunishment.punishedPartyName},#{bankPunishment.mainResponsibleName},#{bankPunishment.mainIllegalFact},
+              #{bankPunishment.punishmentBasis},#{bankPunishment.punishmentDecision},#{bankPunishment.punisherName},
+              #{bankPunishment.punishDate},#{bankPunishment.status})
+    </insert>
+</mapper>

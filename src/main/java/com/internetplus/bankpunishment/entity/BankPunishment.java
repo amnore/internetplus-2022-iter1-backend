@@ -7,9 +7,6 @@ public class BankPunishment {
 
     private Integer id;
 
-    private Long longId;
-
-
     /**
      * 行政处罚名称
      */
