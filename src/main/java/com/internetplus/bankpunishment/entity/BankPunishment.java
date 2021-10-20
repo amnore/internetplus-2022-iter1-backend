@@ -5,7 +5,10 @@ import lombok.Data;
 @Data
 public class BankPunishment {
 
-    private Long id;
+    private Integer id;
+
+    private Long longId;
+
 
     /**
      * 行政处罚名称

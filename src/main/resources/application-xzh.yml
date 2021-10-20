@@ -7,6 +7,3 @@ spring:
     url: jdbc:mysql://20.48.27.93:3306/internet2021?useUnicode=true
     username: root
     password: internet
-
-
-
