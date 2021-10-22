@@ -15,4 +15,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BankPunishmentMapper {
     Integer insertBankPunishment(@Param("bankPunishment") BankPunishment bankPunishment);
+
+    Integer updateBankPunishment(@Param("bankPunishment") BankPunishment bankPunishment);
+
+    Integer updateBankPunishmentExceptNull(@Param("bankPunishment") BankPunishment bankPunishment);
+
+    Integer deleteBankPunishment(@Param("id") int id);
+
 }

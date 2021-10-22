@@ -6,6 +6,8 @@ import com.internetplus.bankpunishment.entity.BankPunishment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+
 /**
  * @program: bank-punishment
  * @description:
@@ -21,4 +23,36 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     public Integer insertBankPunishment(BankPunishment bankPunishment) {
         return bankPunishmentMapper.insertBankPunishment(bankPunishment);
     }
+
+    @Override
+    public void updateBankPunishment(BankPunishment bankPunishment) {//全部字段强制覆盖
+        if (bankPunishment==null) { return; }
+        bankPunishmentMapper.updateBankPunishment(bankPunishment);
+    }
+
+    @Override
+    public void updateBankPunishmentExceptNull(BankPunishment bankPunishment) {//某字段若为null则不更新该字段
+        if (bankPunishment==null) { return; }
+        boolean propertiesAllNull = bankPunishment.getPunisherName()==null
+                &&bankPunishment.getPunishmentDocNo()==null
+                &&bankPunishment.getPunishmentType()==null
+                &&bankPunishment.getPunishedPartyName()==null
+                &&bankPunishment.getMainResponsibleName()==null
+                &&bankPunishment.getMainIllegalFact()==null
+                &&bankPunishment.getPunishmentBasis()==null
+                &&bankPunishment.getPunishmentDecision()==null
+                &&bankPunishment.getPunisherName()==null
+                &&bankPunishment.getPunishDate()==null
+                &&bankPunishment.getStatus()==null;
+        if(!propertiesAllNull){//若全为空，则动态sql中的set语句为空，将报错
+            bankPunishmentMapper.updateBankPunishmentExceptNull(bankPunishment);
+        }
+    }//    百度：谨慎使用动态sql，因为（1）使用动态SQL存在内存溢出隐患（2）代码可读性非常差
+
+    @Override
+    public void deleteBankPunishment(Integer id) {
+        bankPunishmentMapper.deleteBankPunishment(id);
+    }
+
+
 }

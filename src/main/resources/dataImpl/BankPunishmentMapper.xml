@@ -14,4 +14,42 @@
               #{bankPunishment.punishmentBasis},#{bankPunishment.punishmentDecision},#{bankPunishment.punisherName},
               #{bankPunishment.punishDate},#{bankPunishment.status})
     </insert>
+
+    <update id="updateBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment">
+        update bank_punishment set
+        punishmentName=#{bankPunishment.punishmentName},
+        punishmentDocNo=#{bankPunishment.punishmentDocNo},
+        punishmentType=#{bankPunishment.punishmentType},
+        punishedPartyName=#{bankPunishment.punishedPartyName},
+        mainResponsibleName=#{bankPunishment.mainResponsibleName},
+        mainIllegalFact=#{bankPunishment.mainIllegalFact},
+        punishmentBasis=#{bankPunishment.punishmentBasis},
+        punishmentDecision=#{bankPunishment.punishmentDecision},
+        punisherName=#{bankPunishment.punisherName},
+        punishDate=#{bankPunishment.punishDate},
+        status=#{bankPunishment.status}
+        where id = #{bankPunishment.id}
+    </update>
+
+    <update id="updateBankPunishmentExceptNull" parameterType="com.internetplus.bankpunishment.entity.BankPunishment">
+        update bank_punishment
+        <trim prefix="set" suffixOverrides=",">
+            <if test="bankPunishment.punishmentName!=null">punishmentName=#{bankPunishment.punishmentName},</if>
+            <if test="bankPunishment.punishmentDocNo!=null">punishmentDocNo=#{bankPunishment.punishmentDocNo},</if>
+            <if test="bankPunishment.punishmentType!=null">punishmentType=#{bankPunishment.punishmentType},</if>
+            <if test="bankPunishment.punishedPartyName!=null">punishedPartyName=#{bankPunishment.punishedPartyName},</if>
+            <if test="bankPunishment.mainResponsibleName!=null">mainResponsibleName=#{bankPunishment.mainResponsibleName},</if>
+            <if test="bankPunishment.mainIllegalFact!=null">mainIllegalFact=#{bankPunishment.mainIllegalFact},</if>
+            <if test="bankPunishment.punishmentBasis!=null">punishmentBasis=#{bankPunishment.punishmentBasis},</if>
+            <if test="bankPunishment.punishmentDecision!=null">punishmentDecision=#{bankPunishment.punishmentDecision},</if>
+            <if test="bankPunishment.punisherName!=null">punisherName=#{bankPunishment.punisherName},</if>
+            <if test="bankPunishment.punishDate!=null">punishDate=#{bankPunishment.punishDate},</if>
+            <if test="bankPunishment.status!=null">status=#{bankPunishment.status},</if>
+        </trim>
+        where id = #{bankPunishment.id}
+    </update>
+
+    <delete id="deleteBankPunishment">
+        delete from bank_punishment where id = #{id}
+    </delete>
 </mapper>

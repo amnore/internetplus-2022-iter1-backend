@@ -11,4 +11,11 @@ import org.apache.ibatis.annotations.Param;
  **/
 public interface BankPunishmentBl {
     Integer insertBankPunishment( BankPunishment bankPunishment);
+
+
+    public void updateBankPunishment(BankPunishment bankPunishment);
+
+    public void updateBankPunishmentExceptNull(BankPunishment bankPunishment);
+
+    public void deleteBankPunishment(Integer id);
 }
