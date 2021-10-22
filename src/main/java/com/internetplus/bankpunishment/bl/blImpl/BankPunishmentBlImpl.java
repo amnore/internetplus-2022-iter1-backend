@@ -3,10 +3,13 @@ package com.internetplus.bankpunishment.bl.blImpl;
 import com.internetplus.bankpunishment.bl.BankPunishmentBl;
 import com.internetplus.bankpunishment.data.BankPunishmentMapper;
 import com.internetplus.bankpunishment.entity.BankPunishment;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @program: bank-punishment
@@ -19,20 +22,20 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
 
     @Autowired
     BankPunishmentMapper bankPunishmentMapper;
+
     @Override
     public Integer insertBankPunishment(BankPunishment bankPunishment) {
-        return bankPunishmentMapper.insertBankPunishment(bankPunishment);
+        bankPunishmentMapper.insertBankPunishment(bankPunishment);//成功插入时返回1
+        return bankPunishment.getId();//主键会映射到id变量里
     }
 
     @Override
     public void updateBankPunishment(BankPunishment bankPunishment) {//全部字段强制覆盖
-        if (bankPunishment==null) { return; }
         bankPunishmentMapper.updateBankPunishment(bankPunishment);
     }
 
     @Override
     public void updateBankPunishmentExceptNull(BankPunishment bankPunishment) {//某字段若为null则不更新该字段
-        if (bankPunishment==null) { return; }
         boolean propertiesAllNull = bankPunishment.getPunisherName()==null
                 &&bankPunishment.getPunishmentDocNo()==null
                 &&bankPunishment.getPunishmentType()==null
@@ -53,6 +56,12 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     public void deleteBankPunishment(Integer id) {
         bankPunishmentMapper.deleteBankPunishment(id);
     }
+
+    @Override
+    public List<BankPunishment> selectBankPunishment(BankPunishment bankPunishment){
+        return bankPunishmentMapper.selectBankPunishment(bankPunishment);//若全字段为null，则动态sql将返回所有记录
+    }//    百度：谨慎使用动态sql，因为（1）使用动态SQL存在内存溢出隐患（2）代码可读性非常差
+
 
 
 }

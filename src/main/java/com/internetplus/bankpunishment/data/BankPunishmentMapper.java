@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @program: bank-punishment
  * @description:
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface BankPunishmentMapper {
+    //成功插入时返回1，不是返回主键；主键映射到类的id变量里了
     Integer insertBankPunishment(@Param("bankPunishment") BankPunishment bankPunishment);
 
     Integer updateBankPunishment(@Param("bankPunishment") BankPunishment bankPunishment);
@@ -21,5 +24,9 @@ public interface BankPunishmentMapper {
     Integer updateBankPunishmentExceptNull(@Param("bankPunishment") BankPunishment bankPunishment);
 
     Integer deleteBankPunishment(@Param("id") int id);
+
+    BankPunishment selectBankPunishmentById(@Param("id") int id);
+
+    List<BankPunishment> selectBankPunishment(@Param("bankPunishment") BankPunishment bankPunishment);
 
 }

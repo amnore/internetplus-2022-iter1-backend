@@ -3,6 +3,8 @@ package com.internetplus.bankpunishment.bl;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @program: bank-punishment
  * @description:
@@ -10,12 +12,13 @@ import org.apache.ibatis.annotations.Param;
  * @date: 2021-10-20
  **/
 public interface BankPunishmentBl {
-    Integer insertBankPunishment( BankPunishment bankPunishment);
+    Integer insertBankPunishment(BankPunishment bankPunishment);
 
+    void updateBankPunishment(BankPunishment bankPunishment);
 
-    public void updateBankPunishment(BankPunishment bankPunishment);
+    void updateBankPunishmentExceptNull(BankPunishment bankPunishment);
 
-    public void updateBankPunishmentExceptNull(BankPunishment bankPunishment);
+    void deleteBankPunishment(Integer id);
 
-    public void deleteBankPunishment(Integer id);
+    List<BankPunishment> selectBankPunishment(BankPunishment bankPunishment);
 }

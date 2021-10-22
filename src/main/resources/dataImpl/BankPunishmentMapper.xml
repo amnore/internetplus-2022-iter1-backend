@@ -52,4 +52,41 @@
     <delete id="deleteBankPunishment">
         delete from bank_punishment where id = #{id}
     </delete>
+
+    <select id="selectBankPunishmentById" resultMap="BankPunishment">
+        select * from bank_punishment where id=#{id}
+    </select>
+
+    <select id="selectBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment" resultMap="BankPunishment">
+        select * from bank_punishment
+        <trim prefix="where" suffixOverrides="and">
+            <if test="bankPunishment.id!=null">id=#{bankPunishment.id} and</if>
+            <if test="bankPunishment.punishmentName!=null">punishmentName=#{bankPunishment.punishmentName} and</if>
+            <if test="bankPunishment.punishmentDocNo!=null">punishmentDocNo=#{bankPunishment.punishmentDocNo} and</if>
+            <if test="bankPunishment.punishmentType!=null">punishmentType=#{bankPunishment.punishmentType} and</if>
+            <if test="bankPunishment.punishedPartyName!=null">punishedPartyName=#{bankPunishment.punishedPartyName} and</if>
+            <if test="bankPunishment.mainResponsibleName!=null">mainResponsibleName=#{bankPunishment.mainResponsibleName} and</if>
+            <if test="bankPunishment.mainIllegalFact!=null">mainIllegalFact=#{bankPunishment.mainIllegalFact} and</if>
+            <if test="bankPunishment.punishmentBasis!=null">punishmentBasis=#{bankPunishment.punishmentBasis} and</if>
+            <if test="bankPunishment.punishmentDecision!=null">punishmentDecision=#{bankPunishment.punishmentDecision} and</if>
+            <if test="bankPunishment.punisherName!=null">punisherName=#{bankPunishment.punisherName} and</if>
+            <if test="bankPunishment.punishDate!=null">punishDate=#{bankPunishment.punishDate} and</if>
+            <if test="bankPunishment.status!=null">status=#{bankPunishment.status} and</if>
+        </trim>
+    </select>
+
+    <resultMap id="BankPunishment" type="com.internetplus.bankpunishment.entity.BankPunishment">
+        <id column="id" property="id"/>
+        <result column="punishmentName" property="punishmentName"/>
+        <result column="punishmentDocNo" property="punishmentDocNo"/>
+        <result column="punishmentType" property="punishmentType"/>
+        <result column="punishedPartyName" property="punishedPartyName"/>
+        <result column="mainResponsibleName" property="mainResponsibleName"/>
+        <result column="mainIllegalFact" property="mainIllegalFact"/>
+        <result column="punishmentBasis" property="punishmentBasis"/>
+        <result column="punishmentDecision" property="punishmentDecision"/>
+        <result column="punisherName" property="punisherName"/>
+        <result column="punishDate" property="punishDate"/>
+        <result column="status" property="status"/>
+    </resultMap>
 </mapper>

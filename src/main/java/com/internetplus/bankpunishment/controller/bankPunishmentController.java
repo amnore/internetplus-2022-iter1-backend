@@ -25,10 +25,10 @@ public class bankPunishmentController {
 
     @PostMapping("/insert")
     public ResultVO insertBankPunishment(@RequestBody BankPunishment bankPunishment) {
-        System.out.println("insert "+bankPunishment.getId());
+        System.out.println("insert "+bankPunishment);
         try {
-            Integer res = bankPunishmentBl.insertBankPunishment(bankPunishment);
-            return ResultVO.buildSuccess(res);
+            Integer id = bankPunishmentBl.insertBankPunishment(bankPunishment);
+            return ResultVO.buildSuccess(id);
         }catch (Exception e){
             return ResultVO.buildFailure(500,e.getMessage());
         }
@@ -37,7 +37,7 @@ public class bankPunishmentController {
     @PostMapping("/update/{exceptNull}")
     //如果不需要可以删掉ExceptNull参数
     public ResultVO updateBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable boolean exceptNull) {
-        System.out.println("update "+bankPunishment.getId());
+        System.out.println("update "+bankPunishment);
         try {
             if(exceptNull){//某字段若为null则不更新该字段
                 bankPunishmentBl.updateBankPunishmentExceptNull(bankPunishment);
@@ -59,6 +59,18 @@ public class bankPunishmentController {
             }
             System.out.println();
             return ResultVO.buildSuccess("delete successfully");
+        }catch (Exception e){
+            System.out.println();
+            return ResultVO.buildFailure(500,e.getMessage());
+        }
+    }
+
+    @GetMapping("/select")//顺便写了一套select，有更好的写法可以把这个删掉
+    public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment) {
+        System.out.println("select "+bankPunishment);
+        try {
+            List<BankPunishment> bankPunishments = bankPunishmentBl.selectBankPunishment(bankPunishment);//根据非null字段搜索，全null则返回全体
+            return ResultVO.buildSuccess(bankPunishments);
         }catch (Exception e){
             return ResultVO.buildFailure(500,e.getMessage());
         }
