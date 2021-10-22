@@ -20,5 +20,7 @@ public interface BankPunishmentBl {
 
     void deleteBankPunishment(Integer id);
 
+    void publishBankPunishment(Integer id);
+
     List<BankPunishment> selectBankPunishment(BankPunishment bankPunishment);
 }

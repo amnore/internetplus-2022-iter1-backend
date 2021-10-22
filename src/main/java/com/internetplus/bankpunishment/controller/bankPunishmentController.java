@@ -23,7 +23,7 @@ public class bankPunishmentController {
     @Autowired
     BankPunishmentBl bankPunishmentBl;
 
-    @PostMapping("/insert")
+    @PostMapping("/insert")//发布状态由系统录入，即新建时一律尚未发布，前端传的state字段无用
     public ResultVO insertBankPunishment(@RequestBody BankPunishment bankPunishment) {
         System.out.println("insert "+bankPunishment);
         try {
@@ -34,7 +34,7 @@ public class bankPunishmentController {
         }
     }
 
-    @PostMapping("/update/{exceptNull}")
+    @PostMapping("/update/{exceptNull}")//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     //如果不需要可以删掉ExceptNull参数
     public ResultVO updateBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable boolean exceptNull) {
         System.out.println("update "+bankPunishment);
@@ -59,6 +59,21 @@ public class bankPunishmentController {
             }
             System.out.println();
             return ResultVO.buildSuccess("delete successfully");
+        }catch (Exception e){
+            System.out.println();
+            return ResultVO.buildFailure(500,e.getMessage());
+        }
+    }
+
+    @PostMapping("/publish")//发布大概主要是前端展示上的操作，从编辑区列表转移到发布区列表之类
+    public ResultVO publishBankPunishment(@RequestBody List<Integer> IDList) {
+        try {
+            for(Integer id:IDList){
+                System.out.print("publish "+id+";");
+                bankPunishmentBl.publishBankPunishment(id);
+            }
+            System.out.println();
+            return ResultVO.buildSuccess("publish successfully");
         }catch (Exception e){
             System.out.println();
             return ResultVO.buildFailure(500,e.getMessage());

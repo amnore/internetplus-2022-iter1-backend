@@ -28,7 +28,7 @@ class BankPunishmentApplicationTests {
 		int count = bankPunishmentBl.selectBankPunishment(bankPunishment).size();
 
 		//测插入和搜索全体
-		bankPunishmentBl.insertBankPunishment(bankPunishment);
+		bankPunishmentMapper.insertBankPunishment(bankPunishment);
 		int id = bankPunishment.getId();
 		assert bankPunishmentBl.selectBankPunishment(new BankPunishment()).size()==numInAll+1:"insert";
 
@@ -54,6 +54,10 @@ class BankPunishmentApplicationTests {
 		//测：仅有id的部分字段更新不报错
 		bankPunishment.setPunisherName(null);
 		bankPunishmentBl.updateBankPunishmentExceptNull(bankPunishment);
+
+		//测发布
+		bankPunishmentBl.publishBankPunishment(id);
+		assert bankPunishmentMapper.selectBankPunishmentById(id).getStatus().equals("1"):"publish";
 
 		//测删除记录
 		bankPunishmentBl.deleteBankPunishment(id);

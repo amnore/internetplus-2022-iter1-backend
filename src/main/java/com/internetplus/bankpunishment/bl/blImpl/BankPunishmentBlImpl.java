@@ -25,16 +25,17 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
 
     @Override
     public Integer insertBankPunishment(BankPunishment bankPunishment) {
+        bankPunishment.setStatus("0");//发布状态由系统录入，即新建时一律尚未发布
         bankPunishmentMapper.insertBankPunishment(bankPunishment);//成功插入时返回1
         return bankPunishment.getId();//主键会映射到id变量里
     }
 
-    @Override
+    @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     public void updateBankPunishment(BankPunishment bankPunishment) {//全部字段强制覆盖
         bankPunishmentMapper.updateBankPunishment(bankPunishment);
     }
 
-    @Override
+    @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     public void updateBankPunishmentExceptNull(BankPunishment bankPunishment) {//某字段若为null则不更新该字段
         boolean propertiesAllNull = bankPunishment.getPunisherName()==null
                 &&bankPunishment.getPunishmentDocNo()==null
@@ -55,6 +56,12 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     @Override
     public void deleteBankPunishment(Integer id) {
         bankPunishmentMapper.deleteBankPunishment(id);
+    }
+
+    @Override
+    public void publishBankPunishment(Integer id) {
+        bankPunishmentMapper.publishBankPunishment(id);
+        //考虑发布操作可能频繁，专门写一个方法，而不是调用updateBankPunishmentExceptNull（其实好像差不多）
     }
 
     @Override

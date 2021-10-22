@@ -49,6 +49,10 @@
         where id = #{bankPunishment.id}
     </update>
 
+    <update id="publishBankPunishment">
+        update bank_punishment set status='1' where id = #{id}
+    </update>
+
     <delete id="deleteBankPunishment">
         delete from bank_punishment where id = #{id}
     </delete>
