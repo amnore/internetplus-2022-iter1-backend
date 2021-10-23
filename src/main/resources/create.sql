@@ -2,7 +2,7 @@
 
 CREATE TABLE bank_punishment
 (
-    id                  INT NOT NULL AUTO_INCREMENT,
+    id                  BIGINT(20)  NOT NULL AUTO_INCREMENT,
     punishmentName      varchar(64)  NULL,
     punishmentDocNo     varchar(64)  NULL,
     punishmentType      varchar(8)   NULL,
@@ -17,9 +17,9 @@ CREATE TABLE bank_punishment
     long_id             MEDIUMTEXT   NULL,
     PRIMARY KEY (`id`),
     constraint bank_punishment_id_uindex
-        unique (id),
-    constraint bank_punishment_docno_uindex
-        unique (punishmentDocNo)
+        unique (id)
+#     constraint bank_punishment_docno_uindex
+#         unique (punishmentDocNo)
 );
 
 

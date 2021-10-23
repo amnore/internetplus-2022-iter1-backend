@@ -18,8 +18,10 @@ import java.util.List;
  **/
 @Slf4j
 @RestController
-@RequestMapping("/api/bankpunishment")
-public class bankPunishmentController {
+@RequestMapping("/api/bankpunishment")//由于long在前后端传有精度损失，要用string
+public class bankPunishmentController {//解决方案：①另设string字段②用fastjson转化；选fastjson
+
+
     @Autowired
     BankPunishmentBl bankPunishmentBl;
 
@@ -27,8 +29,8 @@ public class bankPunishmentController {
     public ResultVO insertBankPunishment(@RequestBody BankPunishment bankPunishment) {
         System.out.println("insert "+bankPunishment);
         try {
-            Integer id = bankPunishmentBl.insertBankPunishment(bankPunishment);
-            return ResultVO.buildSuccess(id);
+            Long id = bankPunishmentBl.insertBankPunishment(bankPunishment);
+            return ResultVO.buildSuccess(id.toString());//要传字符串保证精度不失
         }catch (Exception e){
             return ResultVO.buildFailure(500,e.getMessage());
         }
@@ -39,6 +41,7 @@ public class bankPunishmentController {
     public ResultVO updateBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable boolean exceptNull) {
         System.out.println("update "+bankPunishment);
         try {
+//            bankPunishment.setId(Long.parseLong(bankPunishment.getStringId()));
             if(exceptNull){//某字段若为null则不更新该字段
                 bankPunishmentBl.updateBankPunishmentExceptNull(bankPunishment);
             }else {//全部字段强制覆盖
@@ -51,11 +54,11 @@ public class bankPunishmentController {
     }
 
     @PostMapping("/delete")
-    public ResultVO deleteBankPunishment(@RequestBody List<Integer> IDList) {
+    public ResultVO deleteBankPunishment(@RequestBody List<String> IDList) {
         try {
-            for(Integer id:IDList){
+            for(String id:IDList){
                 System.out.print("delete "+id+";");
-                bankPunishmentBl.deleteBankPunishment(id);
+                bankPunishmentBl.deleteBankPunishment(Long.parseLong(id));
             }
             System.out.println();
             return ResultVO.buildSuccess("delete successfully");
@@ -66,11 +69,11 @@ public class bankPunishmentController {
     }
 
     @PostMapping("/publish")//发布大概主要是前端展示上的操作，从编辑区列表转移到发布区列表之类
-    public ResultVO publishBankPunishment(@RequestBody List<Integer> IDList) {
+    public ResultVO publishBankPunishment(@RequestBody List<String> IDList) {
         try {
-            for(Integer id:IDList){
+            for(String id:IDList){
                 System.out.print("publish "+id+";");
-                bankPunishmentBl.publishBankPunishment(id);
+                bankPunishmentBl.publishBankPunishment(Long.parseLong(id));
             }
             System.out.println();
             return ResultVO.buildSuccess("publish successfully");
@@ -84,7 +87,17 @@ public class bankPunishmentController {
     public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment) {
         System.out.println("select "+bankPunishment);
         try {
+//            if(bankPunishment.getId()!=null){
+//                throw new Exception("id should be null");
+//            }
+//            if(bankPunishment.getStringId()!=null){
+//                bankPunishment.setId(Long.parseLong(bankPunishment.getStringId()));
+//            }
             List<BankPunishment> bankPunishments = bankPunishmentBl.selectBankPunishment(bankPunishment);//根据非null字段搜索，全null则返回全体
+//            for(BankPunishment bankPunishment1:bankPunishments){
+//                bankPunishment1.setStringId(bankPunishment.getId().toString());
+//                bankPunishment1.setId(null);
+//            }
             return ResultVO.buildSuccess(bankPunishments);
         }catch (Exception e){
             return ResultVO.buildFailure(500,e.getMessage());

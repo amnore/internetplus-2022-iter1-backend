@@ -24,7 +24,7 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     BankPunishmentMapper bankPunishmentMapper;
 
     @Override
-    public Integer insertBankPunishment(BankPunishment bankPunishment) {
+    public Long insertBankPunishment(BankPunishment bankPunishment) {
         bankPunishment.setStatus("0");//发布状态由系统录入，即新建时一律尚未发布
         bankPunishmentMapper.insertBankPunishment(bankPunishment);//成功插入时返回1
         return bankPunishment.getId();//主键会映射到id变量里
@@ -54,18 +54,18 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     }//    百度：谨慎使用动态sql，因为（1）使用动态SQL存在内存溢出隐患（2）代码可读性非常差
 
     @Override
-    public void deleteBankPunishment(Integer id) {
+    public void deleteBankPunishment(Long id) {
         bankPunishmentMapper.deleteBankPunishment(id);
     }
 
     @Override
-    public void publishBankPunishment(Integer id) {
+    public void publishBankPunishment(Long id) {
         bankPunishmentMapper.publishBankPunishment(id);
         //考虑发布操作可能频繁，专门写一个方法，而不是调用updateBankPunishmentExceptNull（其实好像差不多）
     }
 
     @Override
-    public BankPunishment selectBankPunishmentById(Integer id) {
+    public BankPunishment selectBankPunishmentById(Long id) {
         return bankPunishmentMapper.selectBankPunishmentById(id);
     }
 

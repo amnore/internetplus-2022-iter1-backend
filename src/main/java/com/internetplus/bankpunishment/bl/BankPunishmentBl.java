@@ -12,17 +12,17 @@ import java.util.List;
  * @date: 2021-10-20
  **/
 public interface BankPunishmentBl {
-    Integer insertBankPunishment(BankPunishment bankPunishment);
+    Long insertBankPunishment(BankPunishment bankPunishment);
 
     void updateBankPunishment(BankPunishment bankPunishment);
 
     void updateBankPunishmentExceptNull(BankPunishment bankPunishment);
 
-    void deleteBankPunishment(Integer id);
+    void deleteBankPunishment(Long id);
 
-    void publishBankPunishment(Integer id);
+    void publishBankPunishment(Long id);
 
-    BankPunishment selectBankPunishmentById(Integer id);
+    BankPunishment selectBankPunishmentById(Long id);
 
     List<BankPunishment> selectBankPunishment(BankPunishment bankPunishment);
 }

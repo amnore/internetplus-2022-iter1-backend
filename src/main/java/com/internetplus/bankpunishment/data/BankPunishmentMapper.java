@@ -23,11 +23,11 @@ public interface BankPunishmentMapper {
 
     Integer updateBankPunishmentExceptNull(@Param("bankPunishment") BankPunishment bankPunishment);
 
-    Integer publishBankPunishment(@Param("id") int id);
+    Integer publishBankPunishment(@Param("id") long id);
 
-    Integer deleteBankPunishment(@Param("id") int id);
+    Integer deleteBankPunishment(@Param("id") long id);
 
-    BankPunishment selectBankPunishmentById(@Param("id") int id);
+    BankPunishment selectBankPunishmentById(@Param("id") long id);
 
     List<BankPunishment> selectBankPunishment(@Param("bankPunishment") BankPunishment bankPunishment);
 

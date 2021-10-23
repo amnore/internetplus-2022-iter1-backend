@@ -1,5 +1,7 @@
 package com.internetplus.bankpunishment.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BankPunishment {
 
-    private Integer id;
+    @JSONField(serializeUsing = ToStringSerializer.class)//使用fastjson自动转化long和string
+    private Long id;
+
+//    private String stringId;//前后端传输long有精度损失，故用string传，也可以用fastjson
 
     /**
      * 行政处罚名称

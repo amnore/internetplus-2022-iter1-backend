@@ -29,7 +29,7 @@ class BankPunishmentApplicationTests {
 
 		//测插入和搜索全体
 		bankPunishmentMapper.insertBankPunishment(bankPunishment);
-		int id = bankPunishment.getId();
+		Long id = bankPunishment.getId();
 		assert bankPunishmentBl.selectBankPunishment(new BankPunishment()).size()==numInAll+1:"insert";
 
 		//测选择

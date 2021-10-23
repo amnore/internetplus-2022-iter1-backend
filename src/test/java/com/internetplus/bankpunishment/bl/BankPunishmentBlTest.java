@@ -19,7 +19,7 @@ class BankPunishmentBlTest {
 
     @Test
     void selectBankPunishmentById() {
-        BankPunishment bankPunishment = bankPunishmentBl.selectBankPunishmentById(2);
+        BankPunishment bankPunishment = bankPunishmentBl.selectBankPunishmentById(2L);
         System.out.println(bankPunishment.getPunishmentDocNo());
     }
 
