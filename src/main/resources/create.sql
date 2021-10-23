@@ -1,22 +1,26 @@
-create table bank_punishment
+# DROP TABLE IF EXISTS `bank_punishment`;
+
+CREATE TABLE bank_punishment
 (
-    id                  int auto_increment,
-    punishmentName      varchar(64)  null,
-    punishmentDocNo     varchar(64)  null,
-    punishmentType      varchar(8)   null,
-    punishedPartyName   varchar(64)  null,
-    mainResponsibleName varchar(64)  null,
-    mainIllegalFact     varchar(256) null,
-    punishmentBasis     varchar(256) null,
-    punishmentDecision  varchar(256) null,
-    punisherName        varchar(64)  null,
-    punishDate          varchar(64)  null,
-    status              varchar(8)   null,
-    long_id             mediumtext   null,
+    id                  INT NOT NULL AUTO_INCREMENT,
+    punishmentName      varchar(64)  NULL,
+    punishmentDocNo     varchar(64)  NULL,
+    punishmentType      varchar(8)   NULL,
+    punishedPartyName   varchar(64)  NULL,
+    mainResponsibleName varchar(64)  NULL,
+    mainIllegalFact     varchar(256) NULL,
+    punishmentBasis     varchar(256) NULL,
+    punishmentDecision  varchar(256) NULL,
+    punisherName        varchar(64)  NULL,
+    punishDate          varchar(64)  NULL,
+    status              varchar(8)   NULL,
+    long_id             MEDIUMTEXT   NULL,
+    PRIMARY KEY (`id`),
     constraint bank_punishment_id_uindex
-        unique (id)
+        unique (id),
+    constraint bank_punishment_docno_uindex
+        unique (punishmentDocNo)
 );
 
-alter table bank_punishment
-    add primary key (id);
+
 
