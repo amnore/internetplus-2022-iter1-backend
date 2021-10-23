@@ -65,17 +65,31 @@
         select * from bank_punishment
         <trim prefix="where" suffixOverrides="and">
             <if test="bankPunishment.id!=null">id=#{bankPunishment.id} and</if>
-            <if test="bankPunishment.punishmentName!=null">punishmentName=#{bankPunishment.punishmentName} and</if>
             <if test="bankPunishment.punishmentDocNo!=null">punishmentDocNo=#{bankPunishment.punishmentDocNo} and</if>
             <if test="bankPunishment.punishmentType!=null">punishmentType=#{bankPunishment.punishmentType} and</if>
-            <if test="bankPunishment.punishedPartyName!=null">punishedPartyName=#{bankPunishment.punishedPartyName} and</if>
-            <if test="bankPunishment.mainResponsibleName!=null">mainResponsibleName=#{bankPunishment.mainResponsibleName} and</if>
-            <if test="bankPunishment.mainIllegalFact!=null">mainIllegalFact=#{bankPunishment.mainIllegalFact} and</if>
-            <if test="bankPunishment.punishmentBasis!=null">punishmentBasis=#{bankPunishment.punishmentBasis} and</if>
-            <if test="bankPunishment.punishmentDecision!=null">punishmentDecision=#{bankPunishment.punishmentDecision} and</if>
-            <if test="bankPunishment.punisherName!=null">punisherName=#{bankPunishment.punisherName} and</if>
             <if test="bankPunishment.punishDate!=null">punishDate=#{bankPunishment.punishDate} and</if>
             <if test="bankPunishment.status!=null">status=#{bankPunishment.status} and</if>
+            <if test="bankPunishment.punishmentName!=null">
+                punishmentName like concat(#{bankPunishment.punishmentName,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="bankPunishment.punishedPartyName!=null">
+                punishedPartyName like concat(#{bankPunishment.punishedPartyName,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="bankPunishment.mainResponsibleName!=null">
+                mainResponsibleName like concat(#{bankPunishment.mainResponsibleName,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="bankPunishment.mainIllegalFact!=null">
+                mainIllegalFact like concat(#{bankPunishment.mainIllegalFact,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="bankPunishment.punishmentBasis!=null">
+                punishmentBasis like concat(#{bankPunishment.punishmentBasis,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="bankPunishment.punishmentDecision!=null">
+                punishmentDecision like concat(#{bankPunishment.punishmentDecision},'%') and
+            </if>
+            <if test="bankPunishment.punisherName!=null">
+                punisherName like concat(#{bankPunishment.punisherName,jdbcType=VARCHAR},'%') and
+            </if>
         </trim>
     </select>
 

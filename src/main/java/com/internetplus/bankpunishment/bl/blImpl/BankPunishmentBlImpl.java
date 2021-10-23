@@ -65,6 +65,11 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     }
 
     @Override
+    public BankPunishment selectBankPunishmentById(Integer id) {
+        return bankPunishmentMapper.selectBankPunishmentById(id);
+    }
+
+    @Override
     public List<BankPunishment> selectBankPunishment(BankPunishment bankPunishment){
         return bankPunishmentMapper.selectBankPunishment(bankPunishment);//若全字段为null，则动态sql将返回所有记录
     }//    百度：谨慎使用动态sql，因为（1）使用动态SQL存在内存溢出隐患（2）代码可读性非常差

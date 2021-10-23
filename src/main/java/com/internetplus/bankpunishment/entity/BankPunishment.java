@@ -1,8 +1,12 @@
 package com.internetplus.bankpunishment.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BankPunishment {
 
     private Integer id;
