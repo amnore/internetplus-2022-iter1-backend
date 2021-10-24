@@ -14,13 +14,13 @@ import java.util.List;
 public interface BankPunishmentBl {
     Long insertBankPunishment(BankPunishment bankPunishment);
 
-    void updateBankPunishment(BankPunishment bankPunishment);
+    boolean updateBankPunishment(BankPunishment bankPunishment);
 
-    void updateBankPunishmentExceptNull(BankPunishment bankPunishment);
+    boolean updateBankPunishmentExceptNull(BankPunishment bankPunishment);
 
-    void deleteBankPunishment(Long id);
+    boolean deleteBankPunishment(Long id);
 
-    void publishBankPunishment(Long id);
+    boolean publishBankPunishment(Long id);
 
     BankPunishment selectBankPunishmentById(Long id);
 

@@ -41,13 +41,17 @@ public class bankPunishmentController {//解决方案：①另设string字段②
     @PostMapping("/update/{exceptNull}")//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     //如果不需要可以删掉ExceptNull参数
     public ResultVO updateBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable boolean exceptNull) {
-        System.out.println("update "+bankPunishment);
+        System.out.println("update "+bankPunishment+";exceptNull:"+exceptNull);
         try {
+            boolean success = false;
 //            bankPunishment.setId(Long.parseLong(bankPunishment.getStringId()));
             if(exceptNull){//某字段若为null则不更新该字段
-                bankPunishmentBl.updateBankPunishmentExceptNull(bankPunishment);
+                success = bankPunishmentBl.updateBankPunishmentExceptNull(bankPunishment);
             }else {//全部字段强制覆盖
-                bankPunishmentBl.updateBankPunishment(bankPunishment);
+                success = bankPunishmentBl.updateBankPunishment(bankPunishment);
+            }
+            if(!success){
+                throw new Exception("can't change as expected");
             }
             return ResultVO.buildSuccess("update successfully");
         }catch (Exception e){
@@ -58,11 +62,20 @@ public class bankPunishmentController {//解决方案：①另设string字段②
     @PostMapping("/delete")
     public ResultVO deleteBankPunishment(@RequestBody List<String> IDList) {
         try {
+            boolean allSuccess = true;
+            StringBuilder failItems = new StringBuilder();
             for(String id:IDList){
                 System.out.print("delete "+id+";");
-                bankPunishmentBl.deleteBankPunishment(Long.parseLong(id));
+                boolean success = bankPunishmentBl.deleteBankPunishment(Long.parseLong(id));
+                if(!success){
+                    failItems.append(id+",");
+                    allSuccess = false;
+                }
             }
             System.out.println();
+            if(!allSuccess){
+                throw new Exception("id("+failItems.toString()+") can't delete as expected");
+            }
             return ResultVO.buildSuccess("delete successfully");
         }catch (Exception e){
             System.out.println();
@@ -73,11 +86,20 @@ public class bankPunishmentController {//解决方案：①另设string字段②
     @PostMapping("/publish")//发布大概主要是前端展示上的操作，从编辑区列表转移到发布区列表之类
     public ResultVO publishBankPunishment(@RequestBody List<String> IDList) {
         try {
+            boolean allSuccess = true;
+            StringBuilder failItems = new StringBuilder();
             for(String id:IDList){
                 System.out.print("publish "+id+";");
-                bankPunishmentBl.publishBankPunishment(Long.parseLong(id));
+                boolean success = bankPunishmentBl.publishBankPunishment(Long.parseLong(id));
+                if(!success){
+                    failItems.append(id+",");
+                    allSuccess = false;
+                }
             }
             System.out.println();
+            if(!allSuccess){
+                throw new Exception("id("+failItems.toString()+") can't publish as expected");
+            }
             return ResultVO.buildSuccess("publish successfully");
         }catch (Exception e){
             System.out.println();
@@ -87,7 +109,7 @@ public class bankPunishmentController {//解决方案：①另设string字段②
 
     @GetMapping("/select/{pageSize}/{pageNO}")//顺便写了一套select，有更好的写法可以把这个删掉
     public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable int pageSize,@PathVariable int pageNo) {
-        System.out.println("select "+bankPunishment);
+        System.out.println("select "+bankPunishment+";size:"+pageSize+";no:"+pageNo);
         try {
 //            if(bankPunishment.getId()!=null){
 //                throw new Exception("id should be null");
