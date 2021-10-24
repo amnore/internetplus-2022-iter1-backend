@@ -3,11 +3,13 @@ package com.internetplus.bankpunishment.controller;
 import com.internetplus.bankpunishment.bl.BankPunishmentBl;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import com.internetplus.bankpunishment.po.TestPO;
+import com.internetplus.bankpunishment.vo.BankPunishmentPageVO;
 import com.internetplus.bankpunishment.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,8 +85,8 @@ public class bankPunishmentController {//解决方案：①另设string字段②
         }
     }
 
-    @GetMapping("/select")//顺便写了一套select，有更好的写法可以把这个删掉
-    public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment) {
+    @GetMapping("/select/{pageSize}/{pageNO}")//顺便写了一套select，有更好的写法可以把这个删掉
+    public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable int pageSize,@PathVariable int pageNo) {
         System.out.println("select "+bankPunishment);
         try {
 //            if(bankPunishment.getId()!=null){
@@ -94,11 +96,23 @@ public class bankPunishmentController {//解决方案：①另设string字段②
 //                bankPunishment.setId(Long.parseLong(bankPunishment.getStringId()));
 //            }
             List<BankPunishment> bankPunishments = bankPunishmentBl.selectBankPunishment(bankPunishment);//根据非null字段搜索，全null则返回全体
-//            for(BankPunishment bankPunishment1:bankPunishments){
+            int max=bankPunishments.size();
+            List<BankPunishment> resList = new ArrayList<>();
+            if(max!=0) {
+                int fromIndex = pageNo * pageSize;
+                int toIndex = (pageNo+1) * pageSize;
+                if (fromIndex >= max) {
+                    throw new Exception("pageNo overflow");
+                } else{
+                    resList = bankPunishments.subList(fromIndex, Math.min(toIndex, max));
+                }
+            }
+//            for(BankPunishment bankPunishment1:resList){
 //                bankPunishment1.setStringId(bankPunishment.getId().toString());
 //                bankPunishment1.setId(null);
 //            }
-            return ResultVO.buildSuccess(bankPunishments);
+            BankPunishmentPageVO bankPunishmentPageVO = new BankPunishmentPageVO(max,resList);
+            return ResultVO.buildSuccess(bankPunishmentPageVO);
         }catch (Exception e){
             return ResultVO.buildFailure(500,e.getMessage());
         }
