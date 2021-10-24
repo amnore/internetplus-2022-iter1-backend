@@ -1,5 +1,6 @@
 package com.internetplus.bankpunishment.bl;
 
+import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import org.apache.ibatis.annotations.Param;
 
