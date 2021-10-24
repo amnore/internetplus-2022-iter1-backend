@@ -108,8 +108,8 @@ public class bankPunishmentController {//解决方案：①另设string字段②
     }
 
     @GetMapping("/select/{pageSize}/{pageNO}")//顺便写了一套select，有更好的写法可以把这个删掉
-    public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable int pageSize,@PathVariable int pageNo) {
-        System.out.println("select "+bankPunishment+";size:"+pageSize+";no:"+pageNo);
+    public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable int pageSize,@PathVariable int pageNO) {
+        System.out.println("select "+bankPunishment+";size:"+pageSize+";no:"+pageNO);
         try {
 //            if(bankPunishment.getId()!=null){
 //                throw new Exception("id should be null");
@@ -121,10 +121,10 @@ public class bankPunishmentController {//解决方案：①另设string字段②
             int max=bankPunishments.size();
             List<BankPunishment> resList = new ArrayList<>();
             if(max!=0) {
-                int fromIndex = pageNo * pageSize;
-                int toIndex = (pageNo+1) * pageSize;
+                int fromIndex = pageNO * pageSize;
+                int toIndex = (pageNO+1) * pageSize;
                 if (fromIndex >= max) {
-                    throw new Exception("pageNo overflow");
+                    throw new Exception("pageNO overflow");
                 } else{
                     resList = bankPunishments.subList(fromIndex, Math.min(toIndex, max));
                 }
