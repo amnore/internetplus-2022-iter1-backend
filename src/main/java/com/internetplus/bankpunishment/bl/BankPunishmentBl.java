@@ -14,6 +14,8 @@ import java.util.List;
 public interface BankPunishmentBl {
     Long insertBankPunishment(BankPunishment bankPunishment);
 
+    Long addCrawlerBankPunishment(DataEntity dataEntity);
+
     boolean updateBankPunishment(BankPunishment bankPunishment);
 
     boolean updateBankPunishmentExceptNull(BankPunishment bankPunishment);

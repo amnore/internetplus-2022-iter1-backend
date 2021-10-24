@@ -1,6 +1,8 @@
 package com.internetplus.bankpunishment.controller;
 
 import com.internetplus.bankpunishment.bl.BankPunishmentBl;
+import com.internetplus.bankpunishment.crawler.CrawlerStarter;
+import com.internetplus.bankpunishment.crawler.processor.handler.PunishmentDetailPageHandler;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import com.internetplus.bankpunishment.po.TestPO;
 import com.internetplus.bankpunishment.vo.BankPunishmentPageVO;
@@ -22,7 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/bankpunishment")//由于long在前后端传有精度损失，要用string
 public class bankPunishmentController {//解决方案：①另设string字段②用fastjson转化；选fastjson
-
 
     @Autowired
     BankPunishmentBl bankPunishmentBl;
@@ -139,7 +140,5 @@ public class bankPunishmentController {//解决方案：①另设string字段②
             return ResultVO.buildFailure(500,e.getMessage());
         }
     }
-
-
 
 }

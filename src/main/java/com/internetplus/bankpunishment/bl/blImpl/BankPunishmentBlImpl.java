@@ -1,11 +1,14 @@
 package com.internetplus.bankpunishment.bl.blImpl;
 
 import com.internetplus.bankpunishment.bl.BankPunishmentBl;
+import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
 import com.internetplus.bankpunishment.data.BankPunishmentMapper;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -28,6 +31,18 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
         bankPunishment.setStatus("0");//发布状态由系统录入，即新建时一律尚未发布
         bankPunishmentMapper.insertBankPunishment(bankPunishment);//成功插入时返回1
         return bankPunishment.getId();//主键会映射到id变量里
+    }
+
+    /**
+     * 添加爬虫获取的数据对象到数据库
+     */
+    @Override
+    public Long addCrawlerBankPunishment(DataEntity dataEntity) {
+        BankPunishment bankPunishment = new BankPunishment();
+        BeanUtils.copyProperties(dataEntity, bankPunishment);
+        bankPunishment.setStatus("1"); // 所有已经爬取的状态都是已发布
+        bankPunishmentMapper.insertBankPunishment(bankPunishment);
+        return bankPunishment.getId();
     }
 
     @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
