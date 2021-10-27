@@ -9,6 +9,7 @@ spring:
     password: internet
     type: com.alibaba.druid.pool.DruidDataSource
     initialSize: 10
+    maxActive: 20
     minIdle: 5
     maxWait: 60000
     validationQuery: SELECT 1
