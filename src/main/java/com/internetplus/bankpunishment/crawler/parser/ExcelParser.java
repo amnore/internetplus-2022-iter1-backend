@@ -30,6 +30,10 @@ import java.util.List;
  */
 public class ExcelParser {
 
+    public static void main(String[] args) {
+        parseExcel2DataEntity("G:\\win快捷方式\\Downloads\\2021012923570255240.xls");
+    }
+
     /**
      * 给定 Excel 文件的路径，对其进行解析
      * 一直解析单元格，直到遇到一个属于数据字段的单元格，说明这一行是表头
@@ -95,7 +99,15 @@ public class ExcelParser {
                         }
                     }
                     Cell cell = row.getCell(cIndex);
-                    if (cell == null) continue;
+                    if (cell == null) {
+                        if (cIndex == fieldNameList.size() - 1) {
+                            // 到最后一个字段了，还要把 dataEntity 添加到列表中
+                            if (!DataFieldHelper.isAllFieldNull(dataEntity)) {
+                                dataEntityList.add(dataEntity);
+                            }
+                        }
+                        continue;
+                    }
                     String value = getCellValue(sheet,cell);
                     // 对日期需要特殊处理一下
                     if (DataFieldHelper.isPunishDate(fieldNameList.get(cIndex - dataColOffset))) {

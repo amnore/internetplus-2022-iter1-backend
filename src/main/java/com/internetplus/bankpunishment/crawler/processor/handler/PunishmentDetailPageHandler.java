@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.Html;
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -64,13 +63,25 @@ public class PunishmentDetailPageHandler implements ProcessHandler{
     }
 
     /**
+     * 对解析出来的 dataEntity 列表进行持久化
+     */
+    private void saveDataEntityList(List<DataEntity> dataEntityList) {
+        for (DataEntity dataEntity : dataEntityList) {
+            // 首先通过日期是否合法对数据进行一个筛选
+            if (dataEntity.getPunishDate() != null && dataEntity.getPunishDate().contains("-") && dataEntity.getPunishDate().indexOf("-") != dataEntity.getPunishDate().lastIndexOf("-")) {
+                bankPunishmentBl.addCrawlerBankPunishment(dataEntity);
+            } else {
+                System.out.println("-----------------日期不对：" + dataEntity.getPunishDate());
+            }
+        }
+    }
+
+    /**
      * 直接对  html 页面进行解析
      */
     private void parseHtml(Page page) {
         List<DataEntity> dataEntityList = HtmlParser.parseHtml2DataEntity(page);
-        for (DataEntity dataEntity : dataEntityList) {
-            bankPunishmentBl.addCrawlerBankPunishment(dataEntity);
-        }
+        this.saveDataEntityList(dataEntityList);
     }
 
     /**
@@ -78,9 +89,7 @@ public class PunishmentDetailPageHandler implements ProcessHandler{
      */
     private void parsePdf(String filePath) {
         List<DataEntity> dataEntityList = PdfParser.parsePdf2DataEntity(filePath);
-        for (DataEntity dataEntity : dataEntityList) {
-            bankPunishmentBl.addCrawlerBankPunishment(dataEntity);
-        }
+        this.saveDataEntityList(dataEntityList);
     }
 
     /**
@@ -88,9 +97,7 @@ public class PunishmentDetailPageHandler implements ProcessHandler{
      */
     private void parseDoc(String filePath) {
         List<DataEntity> dataEntityList = DocParser.parseExcel2DataEntity(filePath);
-        for (DataEntity dataEntity : dataEntityList) {
-            bankPunishmentBl.addCrawlerBankPunishment(dataEntity);
-        }
+        this.saveDataEntityList(dataEntityList);
     }
 
     /**
@@ -98,9 +105,7 @@ public class PunishmentDetailPageHandler implements ProcessHandler{
      */
     private void parseDocx(String filePath) {
         List<DataEntity> dataEntityList = DocxParser.parseExcel2DataEntity(filePath);
-        for (DataEntity dataEntity : dataEntityList) {
-            bankPunishmentBl.addCrawlerBankPunishment(dataEntity);
-        }
+        this.saveDataEntityList(dataEntityList);
     }
 
     /**
@@ -109,9 +114,6 @@ public class PunishmentDetailPageHandler implements ProcessHandler{
     private void parseExcel(String filePath) {
         // 是一个 excel 文件 (xls 或 xlsx)
         List<DataEntity> dataEntityList = ExcelParser.parseExcel2DataEntity(filePath);
-        for (DataEntity dataEntity : dataEntityList) {
-            bankPunishmentBl.addCrawlerBankPunishment(dataEntity);
-        }
-
+        this.saveDataEntityList(dataEntityList);
     }
 }

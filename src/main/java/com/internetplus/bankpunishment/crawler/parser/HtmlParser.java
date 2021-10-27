@@ -25,6 +25,8 @@ public class HtmlParser {
         // 寻找表头
         List<Selectable> nodes = page.getHtml().xpath("//table/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr[1]/td").nodes();
         if (nodes == null || nodes.size() == 0) nodes = page.getHtml().xpath("//div[@class='txt_con']/table/tbody/tr[1]/td").nodes(); //银行总行
+        if (nodes == null || nodes.size() == 0) nodes = page.getHtml().xpath("//div[2]/table[2]/tbody/tr[1]/td/table/tbody/tr[1]/td").nodes(); //江西分行
+        if (nodes == null || nodes.size() == 0) nodes = page.getHtml().xpath("//div[2]/table/tbody/tr/td/table[2]/tbody/tr[1]/td/div/div/table/tbody/tr[1]/td").nodes(); //青岛分行
         List<String> fieldNameList = new ArrayList<>(12); // 表头字段的名称列表
         for (Selectable node : nodes) {
             String selectableString = getSelectableString(node);
@@ -37,12 +39,18 @@ public class HtmlParser {
 
         int rowNum = page.getHtml().xpath("//table/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr").nodes().size() - 1; // 数据的行数 - 1表头行
         if (rowNum == -1) rowNum =  page.getHtml().xpath("//div[@class='txt_con']/table/tbody/tr").nodes().size() - 1; // 银行总行的数据
+        if (rowNum == -1) rowNum =  page.getHtml().xpath("//div[2]/table[2]/tbody/tr[1]/td/table/tbody/tr").nodes().size() - 1; // 江西分行
+        if (rowNum == -1) rowNum =  page.getHtml().xpath("//div[2]/table/tbody/tr/td/table[2]/tbody/tr[1]/td/div/div/table/tbody/tr").nodes().size() - 1; // 青岛分行
+        if (rowNum == -1) return dataEntityList; // 还等于 -1，就不要了
         int colNum = fieldNameList.size(); // 数据的列的个数
+        if (colNum == 0) return dataEntityList; // 没有表头，直接返回
         String[][] dataArray = new String[rowNum][colNum];
 
         // 将接下来的数据项访问并且放到二维数组中（注意 rowspan）
         nodes = page.getHtml().xpath("//table/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr/td").nodes();
         if (nodes == null || nodes.size() == 0) nodes = page.getHtml().xpath("//div[@class='txt_con']/table/tbody/tr/td").nodes(); //银行总行
+        if (nodes == null || nodes.size() == 0) nodes = page.getHtml().xpath("//div[2]/table[2]/tbody/tr[1]/td/table/tbody/tr/td").nodes(); //江西分行
+        if (nodes == null || nodes.size() == 0) nodes = page.getHtml().xpath("//div[2]/table/tbody/tr/td/table[2]/tbody/tr[1]/td/div/div/table/tbody/tr/td").nodes(); //青岛分行
         // 首先去掉 colNum 个表头
         for (int i = colNum; i < nodes.size(); ++i) {
             int colIndex = (i % colNum); // 该数据项的列索引

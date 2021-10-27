@@ -18,14 +18,16 @@ public class DataFieldHelper {
     private static final String[] punishmentName = new String[]{"行政处罚名称"};
     private static final String[] punishmentDocNo = new String[]{"行政处罚决定文号", "行政处罚决定书文号", "处罚决定书文号", "行政处罚决定书号"};
     private static final String[] punishmentType = new String[]{"处罚类型", "违法行为类型"};
-    private static final String[] punishedPartyName = new String[]{"被罚当事人名称", "当事人名称", "企业名称", "当事人名称(姓名)", "企业名称(姓名)"};
-    private static final String[] mainResponsibleName = new String[]{"主要负责人姓名"};
-    private static final String[] mainIllegalFact = new String[]{"主要违法违规事实(案由)"};
-    private static final String[] punishmentBasis = new String[]{"行政处罚依据"};
-    private static final String[] punishmentDecision = new String[]{"行政处罚决定", "行政处罚内容"};
-    private static final String[] punisherName = new String[]{"行政处罚的机关名称", "作出行政处罚决定机关名称", "处罚作出机关"};
-    private static final String[] punishDate = new String[]{"作出处罚决定的日期", "作出行政处罚决定日期"};
+    private static final String[] punishedPartyName = new String[]{"企业", "行政相对人名称",  "被罚当事人名称", "当事人名称", "企业名称", "当事人名称(姓名)", "企业名称(姓名)", "法人及其他组织名称"};
+    private static final String[] mainResponsibleName = new String[]{"主要负责人姓名", "法定代表人姓名"};
+    private static final String[] mainIllegalFact = new String[]{"主要违法违规事实(案由)", "违法事实", };
+    private static final String[] punishmentBasis = new String[]{"行政处罚依据", "处罚依据"};
+    private static final String[] punishmentDecision = new String[]{"行政处罚决定", "行政处罚内容", "处罚内容"};
+    private static final String[] punisherName = new String[]{"行政处罚的机关名称", "作出行政处罚决定机关名称", "处罚作出机关", "处罚机关"};
+    private static final String[] punishDate = new String[]{"作出处罚决定的日期", "作出行政处罚决定日期", "作出行政处罚决定的日期", "作出行政处罚决定时间", "作出行政处罚决定的时间", "处罚决定日期"};
     private static final String[] remark = new String[]{"备注"};
+    private static final String[] noMeaning = new String[] {"没收违法所得、没收非法财务金额（万元）", "暂扣或吊销证称及编号", "处罚有效期", "公示截止日期", "统一社会信用代码", "部门登记号", "组织机构代码"
+            , "税务登记号", "法定代表人身份证号", "处罚金额（元）" , "处罚机关统一社会信用代码", "数据来源单位", "数据来源统一社会信用代码", "联系电话", "是否公示"};
 
 
 
@@ -45,6 +47,7 @@ public class DataFieldHelper {
         if (isPunisherName(fieldName)) return punisherName[0];
         if (isPunishDate(fieldName)) return punishDate[0];
         if (isRemark(fieldName)) return remark[0];
+        if (isNoMeaning(fieldName)) return noMeaning[0];
         return null;
     }
 
@@ -115,6 +118,10 @@ public class DataFieldHelper {
 
     private static boolean isRemark(String fieldName) {
         return Arrays.stream(remark).anyMatch((name) -> name.equals(removeBlank(fieldName)));
+    }
+
+    private static boolean isNoMeaning(String fieldName) {
+        return Arrays.stream(noMeaning).anyMatch((name) -> name.equals(removeBlank(fieldName)));
     }
 
     /**
