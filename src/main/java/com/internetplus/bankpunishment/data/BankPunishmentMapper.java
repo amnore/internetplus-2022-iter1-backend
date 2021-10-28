@@ -1,6 +1,7 @@
 package com.internetplus.bankpunishment.data;
 
 import com.internetplus.bankpunishment.entity.BankPunishment;
+import com.internetplus.bankpunishment.vo.BankPunishmentQueryVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -27,8 +28,13 @@ public interface BankPunishmentMapper {
 
     Integer deleteBankPunishment(@Param("id") long id);
 
+    int countAll();
+
     BankPunishment selectBankPunishmentById(@Param("id") long id);
 
-    List<BankPunishment> selectBankPunishment(@Param("bankPunishment") BankPunishment bankPunishment);
+    List<BankPunishment> selectBankPunishment(@Param("query") BankPunishmentQueryVO query);
+
+    //全字段模糊搜索
+    List<BankPunishment> selectBankPunishmentByFuzzyQuery(@Param("queryString") String queryString);
 
 }

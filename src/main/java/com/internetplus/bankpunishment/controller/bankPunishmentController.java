@@ -3,16 +3,22 @@ package com.internetplus.bankpunishment.controller;
 import com.internetplus.bankpunishment.bl.BankPunishmentBl;
 import com.internetplus.bankpunishment.crawler.CrawlerStarter;
 import com.internetplus.bankpunishment.crawler.processor.handler.PunishmentDetailPageHandler;
+import com.internetplus.bankpunishment.entity.ApiResult;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import com.internetplus.bankpunishment.po.TestPO;
 import com.internetplus.bankpunishment.vo.BankPunishmentPageVO;
+import com.internetplus.bankpunishment.vo.BankPunishmentQueryVO;
 import com.internetplus.bankpunishment.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @program: bank-punishment
@@ -27,6 +33,10 @@ public class bankPunishmentController {//解决方案：①另设string字段②
 
     @Autowired
     BankPunishmentBl bankPunishmentBl;
+
+    private final Integer defaultPageSize = 20;
+
+    private final Integer defaultPageNo = 0;
 
     @PostMapping("/insert")//发布状态由系统录入，即新建时一律尚未发布，前端传的state字段无用
     public ResultVO insertBankPunishment(@RequestBody BankPunishment bankPunishment) {
@@ -108,17 +118,28 @@ public class bankPunishmentController {//解决方案：①另设string字段②
         }
     }
 
-    @GetMapping("/select/{pageSize}/{pageNO}")//顺便写了一套select，有更好的写法可以把这个删掉
-    public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable int pageSize,@PathVariable int pageNO) {
-        System.out.println("select "+bankPunishment+";size:"+pageSize+";no:"+pageNO);
+    @GetMapping("/query")
+    public ApiResult<BankPunishmentPageVO> queryBankPunishment(@RequestBody BankPunishmentQueryVO query) {
+        String queryString = query.getQueryString();
+        Integer pageSize = query.getPageSize();
+        Integer pageNO = query.getPageNO();
+
+        System.out.println("query:"+queryString+";size:"+pageSize+";no:"+pageNO);
         try {
-//            if(bankPunishment.getId()!=null){
-//                throw new Exception("id should be null");
-//            }
-//            if(bankPunishment.getStringId()!=null){
-//                bankPunishment.setId(Long.parseLong(bankPunishment.getStringId()));
-//            }
-            List<BankPunishment> bankPunishments = bankPunishmentBl.selectBankPunishment(bankPunishment);//根据非null字段搜索，全null则返回全体
+            List<BankPunishment> bankPunishmentsFromQuery = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
+            List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
+            List<BankPunishment> bankPunishments;
+
+            //如果select搜索得到全部，说明select参数全为null，如果query搜索结果存在则直接返回；否则将两个结果合并后返回
+            if (bankPunishmentsFromSelect.size()==bankPunishmentBl.countAll() && bankPunishmentsFromQuery.size()!=0) {
+                bankPunishments = bankPunishmentsFromQuery;
+            } else {
+                bankPunishments = Stream.of(bankPunishmentsFromQuery, bankPunishmentsFromSelect)
+                        .flatMap(Collection::stream)
+                        .distinct()
+                        .collect(Collectors.toList());
+            }
+
             int max=bankPunishments.size();
             List<BankPunishment> resList = new ArrayList<>();
             if(max!=0) {
@@ -130,15 +151,45 @@ public class bankPunishmentController {//解决方案：①另设string字段②
                     resList = bankPunishments.subList(fromIndex, Math.min(toIndex, max));
                 }
             }
-//            for(BankPunishment bankPunishment1:resList){
-//                bankPunishment1.setStringId(bankPunishment.getId().toString());
-//                bankPunishment1.setId(null);
-//            }
             BankPunishmentPageVO bankPunishmentPageVO = new BankPunishmentPageVO(max,resList);
-            return ResultVO.buildSuccess(bankPunishmentPageVO);
-        }catch (Exception e){
-            return ResultVO.buildFailure(500,e.getMessage());
+            return ApiResult.success(bankPunishmentPageVO);
+        } catch (Exception e) {
+            return ApiResult.fail(e.getMessage());
         }
     }
+
+//    @GetMapping("/select/{pageSize}/{pageNO}")//顺便写了一套select，有更好的写法可以把这个删掉
+//    public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable int pageSize,
+//                                         @PathVariable int pageNO) {
+//        System.out.println("select "+bankPunishment+";size:"+pageSize+";no:"+pageNO);
+//        try {
+////            if(bankPunishment.getId()!=null){
+////                throw new Exception("id should be null");
+////            }
+////            if(bankPunishment.getStringId()!=null){
+////                bankPunishment.setId(Long.parseLong(bankPunishment.getStringId()));
+////            }
+//            List<BankPunishment> bankPunishments = bankPunishmentBl.selectBankPunishment(bankPunishment);//根据非null字段搜索，全null则返回全体
+//            int max=bankPunishments.size();
+//            List<BankPunishment> resList = new ArrayList<>();
+//            if(max!=0) {
+//                int fromIndex = pageNO * pageSize;
+//                int toIndex = (pageNO+1) * pageSize;
+//                if (fromIndex >= max) {
+//                    throw new Exception("pageNO overflow");
+//                } else{
+//                    resList = bankPunishments.subList(fromIndex, Math.min(toIndex, max));
+//                }
+//            }
+////            for(BankPunishment bankPunishment1:resList){
+////                bankPunishment1.setStringId(bankPunishment.getId().toString());
+////                bankPunishment1.setId(null);
+////            }
+//            BankPunishmentPageVO bankPunishmentPageVO = new BankPunishmentPageVO(max,resList);
+//            return ResultVO.buildSuccess(bankPunishmentPageVO);
+//        }catch (Exception e){
+//            return ResultVO.buildFailure(500,e.getMessage());
+//        }
+//    }
 
 }

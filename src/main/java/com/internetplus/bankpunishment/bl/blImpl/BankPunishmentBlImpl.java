@@ -4,6 +4,7 @@ import com.internetplus.bankpunishment.bl.BankPunishmentBl;
 import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
 import com.internetplus.bankpunishment.data.BankPunishmentMapper;
 import com.internetplus.bankpunishment.entity.BankPunishment;
+import com.internetplus.bankpunishment.vo.BankPunishmentQueryVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,13 +90,23 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     }
 
     @Override
+    public int countAll() {
+        return bankPunishmentMapper.countAll();
+    }
+
+    @Override
     public BankPunishment selectBankPunishmentById(Long id) {
         return bankPunishmentMapper.selectBankPunishmentById(id);
     }
 
     @Override
-    public List<BankPunishment> selectBankPunishment(BankPunishment bankPunishment){
-        return bankPunishmentMapper.selectBankPunishment(bankPunishment);//若全字段为null，则动态sql将返回所有记录
+    public List<BankPunishment> selectBankPunishmentByFuzzyQuery(String queryString) {
+        return bankPunishmentMapper.selectBankPunishmentByFuzzyQuery(queryString);
+    }
+
+    @Override
+    public List<BankPunishment> selectBankPunishment(BankPunishmentQueryVO query){
+        return bankPunishmentMapper.selectBankPunishment(query);//若全字段为null，则动态sql将返回所有记录
     }//    百度：谨慎使用动态sql，因为（1）使用动态SQL存在内存溢出隐患（2）代码可读性非常差
 
 

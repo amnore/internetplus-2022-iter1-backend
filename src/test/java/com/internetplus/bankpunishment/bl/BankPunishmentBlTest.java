@@ -27,8 +27,20 @@ class BankPunishmentBlTest {
     void selectBankPunishment() {
         BankPunishment bankPunishment = new BankPunishment();
 //        bankPunishment.setPunishmentName("s");
-        bankPunishment.setStatus("1");
-        List<BankPunishment> punishments = bankPunishmentBl.selectBankPunishment(bankPunishment);
+//        bankPunishment.setStatus("1");
+//        List<BankPunishment> punishments = bankPunishmentBl.selectBankPunishment(bankPunishment);
+//        System.out.println(punishments.size());
+    }
+
+    @Test
+    void selectBankPunishmentByFuzzyQuery() {
+        String queryString = " 违反信用信息采集、提供、查询及相关管理规定。";
+        List<BankPunishment> punishments = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
         System.out.println(punishments.size());
+    }
+
+    @Test
+    void countAll() {
+        System.out.println(bankPunishmentBl.countAll());
     }
 }
