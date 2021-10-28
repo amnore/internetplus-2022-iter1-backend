@@ -75,8 +75,6 @@
             like concat('%',#{queryString},'%')
     </select>
 
-    <select id="selectBankPunishment" parameterType="com.internetplus.bankpunishment.vo.BankPunishmentQueryVO"
-            resultMap="BankPunishment">
     <select id="getBankPunishmentCount" resultType="java.lang.Long">
         select count(*) from bank_punishment;
     </select>
