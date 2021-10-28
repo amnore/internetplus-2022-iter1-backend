@@ -77,6 +77,15 @@
 
     <select id="selectBankPunishment" parameterType="com.internetplus.bankpunishment.vo.BankPunishmentQueryVO"
             resultMap="BankPunishment">
+    <select id="getBankPunishmentCount" resultType="java.lang.Long">
+        select count(*) from bank_punishment;
+    </select>
+
+    <select id="selectBankPunishmentByLimitAndOffset" resultMap="BankPunishment">
+        select * from bank_punishment limit #{limitNum} offset #{offsetNum}
+    </select>
+
+    <select id="selectBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment" resultMap="BankPunishment">
         select * from bank_punishment
         <trim prefix="where" suffixOverrides="and">
             <if test="query.id!=null">id=#{query.id} and</if>

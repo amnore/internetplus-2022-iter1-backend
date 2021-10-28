@@ -43,4 +43,13 @@ class BankPunishmentBlTest {
     void countAll() {
         System.out.println(bankPunishmentBl.countAll());
     }
+
+
+//    /**
+//     * 清洗脏数据
+//     */
+//    @Test
+//    void filterDirtyData() {
+//        bankPunishmentBl.filterDirtyBankPunishment();
+//    }
 }

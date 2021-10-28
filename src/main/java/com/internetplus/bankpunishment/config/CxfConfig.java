@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @version 1.0
  * Created by Yunthin.Chow on 2021/10/27
  *
- * webservice 配置类
+ * Webservice 配置类
  */
 @Configuration
 public class CxfConfig {

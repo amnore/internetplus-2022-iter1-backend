@@ -33,4 +33,6 @@ public interface BankPunishmentBl {
     List<BankPunishment> selectBankPunishmentByFuzzyQuery(String queryString);
 
     List<BankPunishment> selectBankPunishment(BankPunishmentQueryVO query);
+
+    boolean filterDirtyBankPunishment();
 }

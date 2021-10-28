@@ -110,5 +110,58 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     }//    百度：谨慎使用动态sql，因为（1）使用动态SQL存在内存溢出隐患（2）代码可读性非常差
 
 
+    /**
+     * 对获取的数据进行清洗
+     *
+     * 每次获取500条数据
+     *      清洗规则：年份在 18xx 年的必定为假
+     *                              将违法行为类型改成个人或单位
+     */
+    public boolean filterDirtyBankPunishment() {
+        long dataCount = bankPunishmentMapper.getBankPunishmentCount();
+        long offsetNum = 0;
+        final int limitNum = 500;
+        while (offsetNum < dataCount) {
+            List<BankPunishment> list = bankPunishmentMapper.selectBankPunishmentByLimitAndOffset(limitNum, offsetNum);
+            offsetNum += limitNum;
+            System.out.println(offsetNum);
+            if (list == null) continue;
+            for (BankPunishment bankPunishment : list) {
+                if (bankPunishment == null) continue;
+                // 去除掉年份为 18xx 的脏数据
+                if (bankPunishment.getPunishDate().trim().startsWith("18")) {
+                    System.out.println("删除脏数据：" + bankPunishment);
+                    bankPunishmentMapper.deleteBankPunishment(bankPunishment.getId());
+                } else {
+                    // 已经清理过的数据不用再更新
+                    if (bankPunishment.getPunishmentType() != null &&
+                            (bankPunishment.getPunishmentType().equals("个人") || bankPunishment.getPunishmentType().equals("企业"))) {
+                        continue;
+                    }
+                    // 将违法行为类型改成个人或单位
+                    if (bankPunishment.getPunishedPartyName() == null) {
+                        // 如果 punishedPartyName 为空，则将其违法类型置为空
+                        bankPunishment.setPunishmentType("");
+                    } else {
+                        String partyName = bankPunishment.getPunishedPartyName().trim();
+                        if (partyName.contains("(")) {
+                            partyName = partyName.substring(0, partyName.indexOf("("));
+                        } else if (partyName.contains("（")) {
+                            partyName = partyName.substring(0, partyName.indexOf("（"));
+                        }
+                        if (partyName.length() == 2 || partyName.length() == 3) {
+                            bankPunishment.setPunishmentType("个人");
+                        } else {
+                            bankPunishment.setPunishmentType("企业");
+                        }
+                    }
+
+                    // 将信息更新到数据库
+                    bankPunishmentMapper.updateBankPunishment(bankPunishment);
+                }
+            }
+        }
+        return true;
+    }
 
 }

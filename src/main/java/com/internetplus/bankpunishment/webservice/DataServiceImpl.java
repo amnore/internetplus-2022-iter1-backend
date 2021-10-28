@@ -1,10 +1,11 @@
 package com.internetplus.bankpunishment.webservice;
 
+import com.internetplus.bankpunishment.data.BankPunishmentMapper;
 import com.internetplus.bankpunishment.entity.BankPunishment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.jws.WebService;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,6 +20,9 @@ import java.util.List;
 @Component
 public class DataServiceImpl implements DataService{
 
+    @Autowired
+    BankPunishmentMapper bankPunishmentMapper;
+
     /**
      * 根据 pageSize 确定数据库内的数据能够被拆分的页数
      * @param pageSize 一页多少条数据
@@ -26,7 +30,8 @@ public class DataServiceImpl implements DataService{
      */
     @Override
     public long getDataPageNum(int pageSize) {
-        return 10;
+        long dataCount = bankPunishmentMapper.getBankPunishmentCount();
+        return (long) Math.ceil(dataCount / (double) pageSize);
     }
 
 
@@ -36,9 +41,7 @@ public class DataServiceImpl implements DataService{
      */
     @Override
     public List<BankPunishment> getDataListByPageNo(int pageSize, long pageNo) {
-        return Arrays.asList(
-                new BankPunishment(),
-                new BankPunishment()
-        );
+        long offset = pageSize * pageNo;
+        return bankPunishmentMapper.selectBankPunishmentByLimitAndOffset(pageSize, offset);
     }
 }

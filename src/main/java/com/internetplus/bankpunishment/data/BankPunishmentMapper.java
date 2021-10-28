@@ -37,4 +37,11 @@ public interface BankPunishmentMapper {
     //全字段模糊搜索
     List<BankPunishment> selectBankPunishmentByFuzzyQuery(@Param("queryString") String queryString);
 
+    List<BankPunishment> selectBankPunishmentByLimitAndOffset(@Param("limitNum") int limitNum, @Param("offsetNum") long offsetNum);
+
+    Long getBankPunishmentCount();
+
+
+
+
 }
