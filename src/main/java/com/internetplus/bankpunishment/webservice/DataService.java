@@ -1,6 +1,7 @@
 package com.internetplus.bankpunishment.webservice;
 
 import com.internetplus.bankpunishment.entity.BankPunishment;
+import com.internetplus.bankpunishment.webservice.exceptions.CustomerException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -22,7 +23,7 @@ public interface DataService {
      * @param pageSize 一页多少条数据
      * @return 共有多少页
      */
-    long getDataPageNum(@WebParam(name = "pageSize") int pageSize);
+    long getDataPageNum(@WebParam(name = "pageSize") int pageSize) throws CustomerException;
 
 
     /**
@@ -31,5 +32,5 @@ public interface DataService {
      * @return 数据项列表
      */
     List<BankPunishment> getDataListByPageNo(@WebParam(name = "pageSize") int pageSize,
-                                             @WebParam(name = "pageNo") long pageNo);
+                                             @WebParam(name = "pageNo") long pageNo) throws CustomerException;
 }

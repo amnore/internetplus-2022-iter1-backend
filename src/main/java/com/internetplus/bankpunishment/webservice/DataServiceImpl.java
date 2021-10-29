@@ -2,6 +2,7 @@ package com.internetplus.bankpunishment.webservice;
 
 import com.internetplus.bankpunishment.data.BankPunishmentMapper;
 import com.internetplus.bankpunishment.entity.BankPunishment;
+import com.internetplus.bankpunishment.webservice.exceptions.CustomerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +30,14 @@ public class DataServiceImpl implements DataService{
      * @return 共有多少页
      */
     @Override
-    public long getDataPageNum(int pageSize) {
-        long dataCount = bankPunishmentMapper.getBankPunishmentCount();
-        return (long) Math.ceil(dataCount / (double) pageSize);
+    public long getDataPageNum(int pageSize)  throws CustomerException {
+        if (pageSize <= 0 || pageSize > 10000) throw new CustomerException("参数错误", "每页数据的大小必须为 1 - 10000 之间的整数");
+        try {
+            long dataCount = bankPunishmentMapper.getBankPunishmentCount();
+            return (long) Math.ceil(dataCount / (double) pageSize);
+        } catch (Exception e) {
+            throw new CustomerException(e.getMessage());
+        }
     }
 
 
@@ -40,8 +46,13 @@ public class DataServiceImpl implements DataService{
      * @return 数据项列表
      */
     @Override
-    public List<BankPunishment> getDataListByPageNo(int pageSize, long pageNo) {
-        long offset = pageSize * pageNo;
-        return bankPunishmentMapper.selectBankPunishmentByLimitAndOffset(pageSize, offset);
+    public List<BankPunishment> getDataListByPageNo(int pageSize, long pageNo)  throws CustomerException{
+        if (pageSize <= 0 || pageSize > 10000) throw new CustomerException("参数错误", "每页数据的大小必须为 1 - 10000 之间的整数");
+        try {
+            long offset = pageSize * pageNo;
+            return bankPunishmentMapper.selectBankPunishmentByLimitAndOffset(pageSize, offset);
+        } catch (Exception e) {
+            throw new CustomerException(e.getMessage());
+        }
     }
 }
