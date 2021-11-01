@@ -6,6 +6,7 @@ import com.internetplus.bankpunishment.crawler.processor.handler.PunishmentDetai
 import com.internetplus.bankpunishment.entity.ApiResult;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import com.internetplus.bankpunishment.po.TestPO;
+import com.internetplus.bankpunishment.utils.HandleFile;
 import com.internetplus.bankpunishment.vo.BankPunishmentPageVO;
 import com.internetplus.bankpunishment.vo.BankPunishmentQueryVO;
 import com.internetplus.bankpunishment.vo.ResultVO;
@@ -13,7 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,6 +53,23 @@ public class bankPunishmentController {//解决方案：①另设string字段②
             return ResultVO.buildFailure(500,e.getMessage());
         }
     }
+
+    @PostMapping("/upload")
+    public ResultVO uploadBankPunishmentByExcel(HttpServletRequest request) throws Exception{
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+
+        MultipartFile file = multipartRequest.getFile(multipartRequest.getFileNames().next());
+
+        if (file.isEmpty()) {
+            return ResultVO.buildFailure(400,"文件不能为空");
+        }
+        InputStream inputStream = file.getInputStream();
+        List<List<Object>> list = HandleFile.parseExcel(inputStream,file.getOriginalFilename());
+        inputStream.close();
+        Integer res = bankPunishmentBl.uploadBankPunishmentByExcel(list);
+        return ResultVO.buildSuccess(res);
+    }
+
 
     @PostMapping("/update/{exceptNull}")//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     //如果不需要可以删掉ExceptNull参数

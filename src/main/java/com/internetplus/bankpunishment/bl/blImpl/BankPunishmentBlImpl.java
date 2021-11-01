@@ -41,6 +41,77 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
         return bankPunishment.getId();//主键会映射到id变量里
     }
 
+    @Override
+    public Integer uploadBankPunishmentByExcel(List<List<Object>> list) {
+        for (int i = 0; i < list.size(); i++) {
+            List<Object> obj = list.get(i);
+            BankPunishment bankPunishment = new BankPunishment();
+
+            bankPunishment.setPunishmentName(obj.get(0).toString().equals("null")?null:obj.get(0).toString());
+
+            if (obj.size() <=1) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setPunishmentDocNo(obj.get(1).toString().equals("null")?null:obj.get(1).toString());
+
+            if (obj.size() <=2) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setPunishmentType(obj.get(2).toString().equals("null")?null:obj.get(2).toString());
+
+            if (obj.size() <=3) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setPunishedPartyName(obj.get(3).toString().equals("null")?null:obj.get(3).toString());
+
+            if (obj.size() <=4) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setMainResponsibleName(obj.get(4).toString().equals("null")?null:obj.get(4).toString());
+
+            if (obj.size() <=5) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setMainIllegalFact(obj.get(5).toString().equals("null")?null:obj.get(5).toString());
+
+            if (obj.size() <=6) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setPunishmentBasis(obj.get(1).toString().equals("null")?null:obj.get(1).toString());
+
+            if (obj.size() <=7) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setPunishmentDecision(obj.get(7).toString());
+            if (obj.size() <=8) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setPunisherName(obj.get(8).toString());
+            if (obj.size() <=9) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setPunishDate(obj.get(9).toString());
+            if (obj.size() <=10) {
+                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+                continue;
+            }
+            bankPunishment.setStatus(obj.get(10).toString());
+
+            Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+        }
+        return 1;
+    }
+
+
     /**
      * 添加爬虫获取的数据对象到数据库
      */

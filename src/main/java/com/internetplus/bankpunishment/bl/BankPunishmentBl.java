@@ -16,6 +16,8 @@ import java.util.List;
 public interface BankPunishmentBl {
     Long insertBankPunishment(BankPunishment bankPunishment) throws Exception;
 
+    public Integer uploadBankPunishmentByExcel(List<List<Object>> list) ;
+
     Long addCrawlerBankPunishment(DataEntity dataEntity);
 
     boolean updateBankPunishment(BankPunishment bankPunishment) throws Exception;
