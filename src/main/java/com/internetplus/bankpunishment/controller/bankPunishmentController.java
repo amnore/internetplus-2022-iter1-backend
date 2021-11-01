@@ -118,11 +118,11 @@ public class bankPunishmentController {//解决方案：①另设string字段②
         }
     }
 
-    @GetMapping("/query")
+    @PostMapping("/query")
     public ApiResult<BankPunishmentPageVO> queryBankPunishment(@RequestBody BankPunishmentQueryVO query) {
         String queryString = query.getQueryString();
-        Integer pageSize = query.getPageSize();
-        Integer pageNO = query.getPageNO();
+        Integer pageSize = query.getPageSize()==null?defaultPageSize: query.getPageSize();
+        Integer pageNO = query.getPageNO()==null?defaultPageNo: query.getPageNO();
 
         System.out.println("query:"+queryString+";size:"+pageSize+";no:"+pageNO);
         try {
