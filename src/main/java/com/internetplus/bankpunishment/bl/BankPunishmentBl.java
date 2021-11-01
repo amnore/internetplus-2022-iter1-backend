@@ -14,7 +14,7 @@ import java.util.List;
  * @date: 2021-10-20
  **/
 public interface BankPunishmentBl {
-    Long insertBankPunishment(BankPunishment bankPunishment);
+    Long insertBankPunishment(BankPunishment bankPunishment) throws Exception;
 
     Long addCrawlerBankPunishment(DataEntity dataEntity);
 

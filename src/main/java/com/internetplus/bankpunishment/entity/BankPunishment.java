@@ -70,4 +70,35 @@ public class BankPunishment {
      * 状态：0.未发布 1.已发布
      */
     private String status;
+
+    public boolean propertiesToChangeExistNull(){
+            return propertiesToInsertExistNull()||this.status==null;
+    };
+
+    public boolean propertiesToChangeAllNull(){
+        return this.punishmentName==null
+                &&this.punishmentDocNo==null
+                &&this.punishmentType==null
+                &&this.punishedPartyName==null
+                &&this.mainResponsibleName==null
+                &&this.mainIllegalFact==null
+                &&this.punishmentBasis==null
+                &&this.punishmentDecision==null
+                &&this.punisherName==null
+                &&this.punishDate==null
+                &&this.status==null;
+    };
+
+    public boolean propertiesToInsertExistNull(){
+        return this.punishmentName==null
+                ||this.punishmentDocNo==null
+                ||this.punishmentType==null
+                ||this.punishedPartyName==null
+                ||this.mainResponsibleName==null
+                ||this.mainIllegalFact==null
+                ||this.punishmentBasis==null
+                ||this.punishmentDecision==null
+                ||this.punisherName==null
+                ||this.punishDate==null;
+    };
 }

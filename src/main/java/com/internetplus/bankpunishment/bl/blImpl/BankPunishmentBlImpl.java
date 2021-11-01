@@ -28,7 +28,14 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     BankPunishmentMapper bankPunishmentMapper;
 
     @Override
-    public Long insertBankPunishment(BankPunishment bankPunishment) {
+    public Long insertBankPunishment(BankPunishment bankPunishment) throws Exception{
+        boolean propertiesExistNull = bankPunishment.propertiesToInsertExistNull();//此处不检查status属性，默认直接设为0
+        if(propertiesExistNull){
+            throw new Exception("properties can't be null");
+        }
+        if(!bankPunishment.getPunishmentType().equals("个人")&&!bankPunishment.getPunishmentType().equals("单位")){
+            throw new Exception("punishment_type should be 个人 or 单位");
+        }
         bankPunishment.setStatus("0");//发布状态由系统录入，即新建时一律尚未发布
         bankPunishmentMapper.insertBankPunishment(bankPunishment);//成功插入时返回1
         return bankPunishment.getId();//主键会映射到id变量里
@@ -48,17 +55,7 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
 
     @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     public boolean updateBankPunishment(BankPunishment bankPunishment) throws Exception{//全部字段强制覆盖
-        boolean propertiesExistNull = bankPunishment.getPunisherName()==null
-                ||bankPunishment.getPunishmentDocNo()==null
-                ||bankPunishment.getPunishmentType()==null
-                ||bankPunishment.getPunishedPartyName()==null
-                ||bankPunishment.getMainResponsibleName()==null
-                ||bankPunishment.getMainIllegalFact()==null
-                ||bankPunishment.getPunishmentBasis()==null
-                ||bankPunishment.getPunishmentDecision()==null
-                ||bankPunishment.getPunisherName()==null
-                ||bankPunishment.getPunishDate()==null
-                ||bankPunishment.getStatus()==null;
+        boolean propertiesExistNull = bankPunishment.propertiesToChangeExistNull();
         if(propertiesExistNull){
             throw new Exception("properties can't be null");
         }
@@ -75,17 +72,7 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
 
     @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     public boolean updateBankPunishmentExceptNull(BankPunishment bankPunishment) throws Exception{//某字段若为null则不更新该字段
-        boolean propertiesAllNull = bankPunishment.getPunisherName()==null
-                &&bankPunishment.getPunishmentDocNo()==null
-                &&bankPunishment.getPunishmentType()==null
-                &&bankPunishment.getPunishedPartyName()==null
-                &&bankPunishment.getMainResponsibleName()==null
-                &&bankPunishment.getMainIllegalFact()==null
-                &&bankPunishment.getPunishmentBasis()==null
-                &&bankPunishment.getPunishmentDecision()==null
-                &&bankPunishment.getPunisherName()==null
-                &&bankPunishment.getPunishDate()==null
-                &&bankPunishment.getStatus()==null;
+        boolean propertiesAllNull = bankPunishment.propertiesToChangeAllNull();
         if(propertiesAllNull){//若全为空，则动态sql中的set语句为空，将报错
             throw new Exception("there should be at least one property not null to be changed");
         }
