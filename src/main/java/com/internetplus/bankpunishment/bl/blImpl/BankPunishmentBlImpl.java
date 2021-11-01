@@ -36,78 +36,112 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
         if(!bankPunishment.punishmentTypeIsValid()){
             throw new Exception("punishment_type should be 个人 or 单位");
         }
+        //  todo 所有的都不能为null或者空？
+        if (!isAllPropertiesNotNullOrEmpty(bankPunishment)) {
+            throw new Exception("properties can be null or empty");
+        }
         bankPunishment.setStatus("0");//发布状态由系统录入，即新建时一律尚未发布
         bankPunishmentMapper.insertBankPunishment(bankPunishment);//成功插入时返回1
         return bankPunishment.getId();//主键会映射到id变量里
     }
 
     @Override
-    public Integer uploadBankPunishmentByExcel(List<List<Object>> list) {
+    public Integer uploadBankPunishmentByExcel(List<List<Object>> list) throws Exception{
+        int inserted_num = 0;
         for (int i = 0; i < list.size(); i++) {
             List<Object> obj = list.get(i);
             BankPunishment bankPunishment = new BankPunishment();
+            /**
+             * 如果有一个obj里面，size不够大，就说明这行不能插入，要continue，插入的num不加
+             */
+            if (obj.size() < 11) {
+                continue;
+            }else{
+                bankPunishment.setPunishmentName(obj.get(0).toString().equals("null")?null:obj.get(0).toString());
+                bankPunishment.setPunishmentDocNo(obj.get(1).toString().equals("null")?null:obj.get(1).toString());
+                bankPunishment.setPunishmentType(obj.get(2).toString().equals("null")?null:obj.get(2).toString());
+                bankPunishment.setPunishedPartyName(obj.get(3).toString().equals("null")?null:obj.get(3).toString());
+                bankPunishment.setMainResponsibleName(obj.get(4).toString().equals("null")?null:obj.get(4).toString());
+                bankPunishment.setMainIllegalFact(obj.get(5).toString().equals("null")?null:obj.get(5).toString());
+                bankPunishment.setPunishmentBasis(obj.get(1).toString().equals("null")?null:obj.get(6).toString());
+                bankPunishment.setPunishmentDecision(obj.get(7).toString());
+                bankPunishment.setPunisherName(obj.get(8).toString());
+                bankPunishment.setPunishDate(obj.get(9).toString());
+                bankPunishment.setStatus(obj.get(10).toString());
+                try {
+                    Long res = insertBankPunishment(bankPunishment);
+                    inserted_num++;
+                } catch (Exception e) {
+                    continue;
+                }
 
-            bankPunishment.setPunishmentName(obj.get(0).toString().equals("null")?null:obj.get(0).toString());
-
-            if (obj.size() <=1) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
             }
-            bankPunishment.setPunishmentDocNo(obj.get(1).toString().equals("null")?null:obj.get(1).toString());
-
-            if (obj.size() <=2) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setPunishmentType(obj.get(2).toString().equals("null")?null:obj.get(2).toString());
-
-            if (obj.size() <=3) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setPunishedPartyName(obj.get(3).toString().equals("null")?null:obj.get(3).toString());
-
-            if (obj.size() <=4) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setMainResponsibleName(obj.get(4).toString().equals("null")?null:obj.get(4).toString());
-
-            if (obj.size() <=5) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setMainIllegalFact(obj.get(5).toString().equals("null")?null:obj.get(5).toString());
-
-            if (obj.size() <=6) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setPunishmentBasis(obj.get(1).toString().equals("null")?null:obj.get(1).toString());
-
-            if (obj.size() <=7) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setPunishmentDecision(obj.get(7).toString());
-            if (obj.size() <=8) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setPunisherName(obj.get(8).toString());
-            if (obj.size() <=9) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setPunishDate(obj.get(9).toString());
-            if (obj.size() <=10) {
-                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-                continue;
-            }
-            bankPunishment.setStatus(obj.get(10).toString());
-
-            Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//
+//            bankPunishment.setPunishmentName(obj.get(0).toString().equals("null")?null:obj.get(0).toString());
+//
+//            if (obj.size() <=1) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setPunishmentDocNo(obj.get(1).toString().equals("null")?null:obj.get(1).toString());
+//
+//            if (obj.size() <=2) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setPunishmentType(obj.get(2).toString().equals("null")?null:obj.get(2).toString());
+//
+//            if (obj.size() <=3) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setPunishedPartyName(obj.get(3).toString().equals("null")?null:obj.get(3).toString());
+//
+//            if (obj.size() <=4) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setMainResponsibleName(obj.get(4).toString().equals("null")?null:obj.get(4).toString());
+//
+//            if (obj.size() <=5) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setMainIllegalFact(obj.get(5).toString().equals("null")?null:obj.get(5).toString());
+//
+//            if (obj.size() <=6) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setPunishmentBasis(obj.get(1).toString().equals("null")?null:obj.get(6).toString());
+//
+//            if (obj.size() <=7) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setPunishmentDecision(obj.get(7).toString());
+//            if (obj.size() <=8) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setPunisherName(obj.get(8).toString());
+//            if (obj.size() <=9) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setPunishDate(obj.get(9).toString());
+//            if (obj.size() <=10) {
+//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
+//                continue;
+//            }
+//            bankPunishment.setStatus(obj.get(10).toString());
+//
+//            Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
         }
+        if (list.size() != inserted_num) {
+            throw new Exception("some rows has empty or null properties");
+        }
+
         return 1;
     }
 
@@ -244,6 +278,23 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
                     bankPunishmentMapper.updateBankPunishment(bankPunishment);
                 }
             }
+        }
+        return true;
+    }
+
+    boolean isAllPropertiesNotNullOrEmpty(BankPunishment bankPunishment) {
+        if ((bankPunishment.getMainIllegalFact() == null || bankPunishment.getMainIllegalFact() == "")
+                || (bankPunishment.getMainResponsibleName() == null || bankPunishment.getMainResponsibleName() == "")
+                || (bankPunishment.getPunishDate() == null || bankPunishment.getPunishDate() == "")
+                || (bankPunishment.getPunishedPartyName() == null || bankPunishment.getPunishedPartyName() == "")
+                || (bankPunishment.getPunisherName() == null || bankPunishment.getPunisherName() == "")
+                || (bankPunishment.getPunishmentBasis() == null || bankPunishment.getPunishmentBasis() == "")
+                || (bankPunishment.getPunishmentDecision() == null || bankPunishment.getPunishmentDecision() == "")
+                || (bankPunishment.getPunishmentDocNo() == null || bankPunishment.getPunishmentDocNo() == "")
+                || (bankPunishment.getPunishmentName() == null || bankPunishment.getPunishmentName() == "")
+                || (bankPunishment.getPunishmentType() == null || bankPunishment.getPunishmentType() == "")
+                || (bankPunishment.getStatus() == null || bankPunishment.getStatus() == "")) {
+            return false;
         }
         return true;
     }

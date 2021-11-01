@@ -66,8 +66,13 @@ public class bankPunishmentController {//解决方案：①另设string字段②
         InputStream inputStream = file.getInputStream();
         List<List<Object>> list = HandleFile.parseExcel(inputStream,file.getOriginalFilename());
         inputStream.close();
-        Integer res = bankPunishmentBl.uploadBankPunishmentByExcel(list);
-        return ResultVO.buildSuccess(res);
+        try {
+            Integer res = bankPunishmentBl.uploadBankPunishmentByExcel(list);
+            return ResultVO.buildSuccess(res);
+        } catch (Exception e) {
+            return ResultVO.buildFailure(500, e.getMessage());
+        }
+
     }
 
 
@@ -179,6 +184,8 @@ public class bankPunishmentController {//解决方案：①另设string字段②
             return ApiResult.fail(e.getMessage());
         }
     }
+
+
 
 //    @GetMapping("/select/{pageSize}/{pageNO}")//顺便写了一套select，有更好的写法可以把这个删掉
 //    public ResultVO selectBankPunishment(@RequestBody BankPunishment bankPunishment,@PathVariable int pageSize,
