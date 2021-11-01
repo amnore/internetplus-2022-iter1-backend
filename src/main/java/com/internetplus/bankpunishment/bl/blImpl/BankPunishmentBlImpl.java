@@ -47,15 +47,34 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     }
 
     @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
-    public boolean updateBankPunishment(BankPunishment bankPunishment) {//全部字段强制覆盖
+    public boolean updateBankPunishment(BankPunishment bankPunishment) throws Exception{//全部字段强制覆盖
+        boolean propertiesExistNull = bankPunishment.getPunisherName()==null
+                ||bankPunishment.getPunishmentDocNo()==null
+                ||bankPunishment.getPunishmentType()==null
+                ||bankPunishment.getPunishedPartyName()==null
+                ||bankPunishment.getMainResponsibleName()==null
+                ||bankPunishment.getMainIllegalFact()==null
+                ||bankPunishment.getPunishmentBasis()==null
+                ||bankPunishment.getPunishmentDecision()==null
+                ||bankPunishment.getPunisherName()==null
+                ||bankPunishment.getPunishDate()==null
+                ||bankPunishment.getStatus()==null;
+        if(propertiesExistNull){
+            throw new Exception("properties can't be null");
+        }
+        if(!bankPunishment.getPunishmentType().equals("个人")&&!bankPunishment.getPunishmentType().equals("单位")){
+            throw new Exception("punishment_type should be 个人 or 单位");
+        }
+        if(!bankPunishment.getStatus().equals("0")&&!bankPunishment.getStatus().equals("1")){
+            throw new Exception("status should be 0 or 1");
+        }
         Integer changedNum = bankPunishmentMapper.updateBankPunishment(bankPunishment);
         System.out.println("changeNum: "+changedNum);
         return changedNum==1;
     }
 
     @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
-    public boolean updateBankPunishmentExceptNull(BankPunishment bankPunishment) {//某字段若为null则不更新该字段
-        Integer changedNum = 0;
+    public boolean updateBankPunishmentExceptNull(BankPunishment bankPunishment) throws Exception{//某字段若为null则不更新该字段
         boolean propertiesAllNull = bankPunishment.getPunisherName()==null
                 &&bankPunishment.getPunishmentDocNo()==null
                 &&bankPunishment.getPunishmentType()==null
@@ -67,9 +86,16 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
                 &&bankPunishment.getPunisherName()==null
                 &&bankPunishment.getPunishDate()==null
                 &&bankPunishment.getStatus()==null;
-        if(!propertiesAllNull){//若全为空，则动态sql中的set语句为空，将报错
-            changedNum = bankPunishmentMapper.updateBankPunishmentExceptNull(bankPunishment);
+        if(propertiesAllNull){//若全为空，则动态sql中的set语句为空，将报错
+            throw new Exception("there should be at least one property not null to be changed");
         }
+        if(bankPunishment.getPunishmentType()!=null&&!bankPunishment.getPunishmentType().equals("个人")&&!bankPunishment.getPunishmentType().equals("单位")){
+            throw new Exception("punishment_type should be 个人 or 单位");
+        }
+        if(bankPunishment.getStatus()!=null&&!bankPunishment.getStatus().equals("0")&&!bankPunishment.getStatus().equals("1")){
+            throw new Exception("status should be 0 or 1");
+        }
+        Integer changedNum = bankPunishmentMapper.updateBankPunishmentExceptNull(bankPunishment);
         System.out.println("changeNum: "+changedNum);
         return changedNum==1;
     }//    百度：谨慎使用动态sql，因为（1）使用动态SQL存在内存溢出隐患（2）代码可读性非常差

@@ -18,9 +18,9 @@ public interface BankPunishmentBl {
 
     Long addCrawlerBankPunishment(DataEntity dataEntity);
 
-    boolean updateBankPunishment(BankPunishment bankPunishment);
+    boolean updateBankPunishment(BankPunishment bankPunishment) throws Exception;
 
-    boolean updateBankPunishmentExceptNull(BankPunishment bankPunishment);
+    boolean updateBankPunishmentExceptNull(BankPunishment bankPunishment) throws Exception;
 
     boolean deleteBankPunishment(Long id);
 
