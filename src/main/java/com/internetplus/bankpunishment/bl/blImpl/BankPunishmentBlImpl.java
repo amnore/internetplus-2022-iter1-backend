@@ -33,7 +33,7 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
         if(propertiesExistNull){
             throw new Exception("properties can't be null");
         }
-        if(!bankPunishment.getPunishmentType().equals("个人")&&!bankPunishment.getPunishmentType().equals("单位")){
+        if(!bankPunishment.punishmentTypeIsValid()){
             throw new Exception("punishment_type should be 个人 or 单位");
         }
         bankPunishment.setStatus("0");//发布状态由系统录入，即新建时一律尚未发布
@@ -59,10 +59,10 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
         if(propertiesExistNull){
             throw new Exception("properties can't be null");
         }
-        if(!bankPunishment.getPunishmentType().equals("个人")&&!bankPunishment.getPunishmentType().equals("单位")){
+        if(!bankPunishment.punishmentTypeIsValid()){
             throw new Exception("punishment_type should be 个人 or 单位");
         }
-        if(!bankPunishment.getStatus().equals("0")&&!bankPunishment.getStatus().equals("1")){
+        if(!bankPunishment.statusIsValid()){
             throw new Exception("status should be 0 or 1");
         }
         Integer changedNum = bankPunishmentMapper.updateBankPunishment(bankPunishment);
@@ -76,10 +76,10 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
         if(propertiesAllNull){//若全为空，则动态sql中的set语句为空，将报错
             throw new Exception("there should be at least one property not null to be changed");
         }
-        if(bankPunishment.getPunishmentType()!=null&&!bankPunishment.getPunishmentType().equals("个人")&&!bankPunishment.getPunishmentType().equals("单位")){
+        if(bankPunishment.getPunishmentType()!=null&&!bankPunishment.punishmentTypeIsValid()){
             throw new Exception("punishment_type should be 个人 or 单位");
         }
-        if(bankPunishment.getStatus()!=null&&!bankPunishment.getStatus().equals("0")&&!bankPunishment.getStatus().equals("1")){
+        if(bankPunishment.getStatus()!=null&&!bankPunishment.statusIsValid()){
             throw new Exception("status should be 0 or 1");
         }
         Integer changedNum = bankPunishmentMapper.updateBankPunishmentExceptNull(bankPunishment);

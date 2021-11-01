@@ -101,4 +101,12 @@ public class BankPunishment {
                 ||this.punisherName==null
                 ||this.punishDate==null;
     };
+
+    public boolean punishmentTypeIsValid(){
+        return this.punishmentType.equals("个人")||this.punishmentType.equals("单位");
+    }
+
+    public boolean statusIsValid(){
+        return  this.status.equals("0")||this.status.equals("1");
+    }
 }
