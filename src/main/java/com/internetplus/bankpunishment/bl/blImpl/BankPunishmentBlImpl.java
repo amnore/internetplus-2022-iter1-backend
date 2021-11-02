@@ -51,13 +51,13 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
             if (obj.size() < 11) {
                 continue;
             }else{
-                bankPunishment.setPunishmentName(obj.get(0).toString().equals("null")?null:obj.get(0).toString());
-                bankPunishment.setPunishmentDocNo(obj.get(1).toString().equals("null")?null:obj.get(1).toString());
-                bankPunishment.setPunishmentType(obj.get(2).toString().equals("null")?null:obj.get(2).toString());
-                bankPunishment.setPunishedPartyName(obj.get(3).toString().equals("null")?null:obj.get(3).toString());
-                bankPunishment.setMainResponsibleName(obj.get(4).toString().equals("null")?null:obj.get(4).toString());
-                bankPunishment.setMainIllegalFact(obj.get(5).toString().equals("null")?null:obj.get(5).toString());
-                bankPunishment.setPunishmentBasis(obj.get(1).toString().equals("null")?null:obj.get(6).toString());
+                bankPunishment.setPunishmentName(obj.get(0).toString());
+                bankPunishment.setPunishmentDocNo(obj.get(1).toString());
+                bankPunishment.setPunishmentType(obj.get(2).toString());
+                bankPunishment.setPunishedPartyName(obj.get(3).toString());
+                bankPunishment.setMainResponsibleName(obj.get(4).toString());
+                bankPunishment.setMainIllegalFact(obj.get(5).toString());
+                bankPunishment.setPunishmentBasis(obj.get(6).toString());
                 bankPunishment.setPunishmentDecision(obj.get(7).toString());
                 bankPunishment.setPunisherName(obj.get(8).toString());
                 bankPunishment.setPunishDate(obj.get(9).toString());
