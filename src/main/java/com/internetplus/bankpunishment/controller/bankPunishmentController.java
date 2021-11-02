@@ -154,20 +154,27 @@ public class bankPunishmentController {//解决方案：①另设string字段②
 
         System.out.println("query:"+queryString+";size:"+pageSize+";no:"+pageNO);
         try {
-            List<BankPunishment> bankPunishmentsFromQuery = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
-            List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
             List<BankPunishment> bankPunishments;
 
-            //如果select搜索得到全部，说明select参数全为null，如果query搜索结果存在则直接返回；否则将两个结果合并后返回
-            if (bankPunishmentsFromSelect.size()==bankPunishmentBl.countAll() && bankPunishmentsFromQuery.size()!=0) {
-                bankPunishments = bankPunishmentsFromQuery;
-            } else {
-                bankPunishments = Stream.of(bankPunishmentsFromQuery, bankPunishmentsFromSelect)
-                        .flatMap(Collection::stream)
-                        .distinct()
-                        .collect(Collectors.toList());
+            if(queryString==null){//搜索关键字为空，则只是筛选的模式
+                bankPunishments = bankPunishmentBl.selectBankPunishment(query);
+            }else{
+                boolean queryOnly = query.conditionAllNull();
+                if(queryOnly){//搜索关键字不为空，筛选条件全null，则只是模糊搜索的模式
+                    bankPunishments = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
+                }else {//模糊搜索和筛选结合，目前是取并集，未来可以改成取交集（感觉更符合直觉）
+                    List<BankPunishment> bankPunishmentsFromQuery = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
+                    List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
+
+                    bankPunishments = Stream.of(bankPunishmentsFromQuery, bankPunishmentsFromSelect)
+                            .flatMap(Collection::stream)
+                            .distinct()
+                            .collect(Collectors.toList());
+                }
+
             }
 
+            //将结果集分页，并包装成页对象
             int max=bankPunishments.size();
             List<BankPunishment> resList = new ArrayList<>();
             if(max!=0) {
