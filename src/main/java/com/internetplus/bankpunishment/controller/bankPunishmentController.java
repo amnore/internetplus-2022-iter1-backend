@@ -47,6 +47,7 @@ public class bankPunishmentController {//解决方案：①另设string字段②
     public ResultVO insertBankPunishment(@RequestBody BankPunishment bankPunishment) {
         System.out.println("insert "+bankPunishment);
         try {
+            bankPunishment.setStatus("0");//发布状态由系统录入，即新建时一律尚未发布
             Long id = bankPunishmentBl.insertBankPunishment(bankPunishment);
             return ResultVO.buildSuccess(id.toString());//要传字符串保证精度不失
         }catch (Exception e){

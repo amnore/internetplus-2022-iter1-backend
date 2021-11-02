@@ -29,18 +29,12 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
 
     @Override
     public Long insertBankPunishment(BankPunishment bankPunishment) throws Exception{
-        boolean propertiesExistNull = bankPunishment.propertiesToInsertExistNull();//此处不检查status属性，默认直接设为0
-        if(propertiesExistNull){
-            throw new Exception("properties can't be null");
+        boolean propertiesExistSpace = bankPunishment.propertiesToInsertExistSpace();//经考虑，仍检查status属性
+        if(propertiesExistSpace){
+            throw new Exception("properties can't be space(including null and empty)");
         }
-        if(!bankPunishment.punishmentTypeIsValid()){
-            throw new Exception("punishment_type should be 个人 or 单位");
-        }
-        //  todo 所有的都不能为null或者空？
-        if (!isAllPropertiesNotNullOrEmpty(bankPunishment)) {
-            throw new Exception("properties can be null or empty");
-        }
-        bankPunishment.setStatus("0");//发布状态由系统录入，即新建时一律尚未发布
+        //在controller层设置0，bl层仍检验status，使insert与update有一致性
+        bankPunishment.reportInvalidProp();
         bankPunishmentMapper.insertBankPunishment(bankPunishment);//成功插入时返回1
         return bankPunishment.getId();//主键会映射到id变量里
     }
@@ -160,16 +154,11 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
 
     @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     public boolean updateBankPunishment(BankPunishment bankPunishment) throws Exception{//全部字段强制覆盖
-        boolean propertiesExistNull = bankPunishment.propertiesToChangeExistNull();
-        if(propertiesExistNull){
-            throw new Exception("properties can't be null");
+        boolean propertiesExistSpace = bankPunishment.propertiesForceChangeExistSpace();
+        if(propertiesExistSpace){
+            throw new Exception("properties can't be space(including null and empty)");
         }
-        if(!bankPunishment.punishmentTypeIsValid()){
-            throw new Exception("punishment_type should be 个人 or 单位");
-        }
-        if(!bankPunishment.statusIsValid()){
-            throw new Exception("status should be 0 or 1");
-        }
+        bankPunishment.reportInvalidProp();
         Integer changedNum = bankPunishmentMapper.updateBankPunishment(bankPunishment);
         System.out.println("changeNum: "+changedNum);
         return changedNum==1;
@@ -181,12 +170,11 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
         if(propertiesAllNull){//若全为空，则动态sql中的set语句为空，将报错
             throw new Exception("there should be at least one property not null to be changed");
         }
-        if(bankPunishment.getPunishmentType()!=null&&!bankPunishment.punishmentTypeIsValid()){
-            throw new Exception("punishment_type should be 个人 or 单位");
+        boolean propertiesExistSpace = bankPunishment.propertiesPartChangeExistSpace();
+        if(propertiesExistSpace){
+            throw new Exception("properties to be changed can't be space(including null and empty)");
         }
-        if(bankPunishment.getStatus()!=null&&!bankPunishment.statusIsValid()){
-            throw new Exception("status should be 0 or 1");
-        }
+        bankPunishment.reportInvalidProp();
         Integer changedNum = bankPunishmentMapper.updateBankPunishmentExceptNull(bankPunishment);
         System.out.println("changeNum: "+changedNum);
         return changedNum==1;
@@ -278,23 +266,6 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
                     bankPunishmentMapper.updateBankPunishment(bankPunishment);
                 }
             }
-        }
-        return true;
-    }
-
-    boolean isAllPropertiesNotNullOrEmpty(BankPunishment bankPunishment) {
-        if ((bankPunishment.getMainIllegalFact() == null || bankPunishment.getMainIllegalFact() == "")
-                || (bankPunishment.getMainResponsibleName() == null || bankPunishment.getMainResponsibleName() == "")
-                || (bankPunishment.getPunishDate() == null || bankPunishment.getPunishDate() == "")
-                || (bankPunishment.getPunishedPartyName() == null || bankPunishment.getPunishedPartyName() == "")
-                || (bankPunishment.getPunisherName() == null || bankPunishment.getPunisherName() == "")
-                || (bankPunishment.getPunishmentBasis() == null || bankPunishment.getPunishmentBasis() == "")
-                || (bankPunishment.getPunishmentDecision() == null || bankPunishment.getPunishmentDecision() == "")
-                || (bankPunishment.getPunishmentDocNo() == null || bankPunishment.getPunishmentDocNo() == "")
-                || (bankPunishment.getPunishmentName() == null || bankPunishment.getPunishmentName() == "")
-                || (bankPunishment.getPunishmentType() == null || bankPunishment.getPunishmentType() == "")
-                || (bankPunishment.getStatus() == null || bankPunishment.getStatus() == "")) {
-            return false;
         }
         return true;
     }

@@ -71,9 +71,23 @@ public class BankPunishment {
      */
     private String status;
 
-    public boolean propertiesToChangeExistNull(){
-            return propertiesToInsertExistNull()||this.status==null;
+    public boolean propertiesForceChangeExistSpace(){
+        return propertiesToInsertExistSpace();
     };
+
+    public boolean propertiesPartChangeExistSpace(){
+        return isSpaceExceptNull(this.punishmentName)
+                ||isSpaceExceptNull(this.punishmentDocNo)
+                ||isSpaceExceptNull(this.punishmentType)
+                ||isSpaceExceptNull(this.punishedPartyName)
+                ||isSpaceExceptNull(this.mainResponsibleName)
+                ||isSpaceExceptNull(this.mainIllegalFact)
+                ||isSpaceExceptNull(this.punishmentBasis)
+                ||isSpaceExceptNull(this.punishmentDecision)
+                ||isSpaceExceptNull(this.punisherName)
+                ||isSpaceExceptNull(this.punishDate)
+                ||isSpaceExceptNull(this.status);
+    }
 
     public boolean propertiesToChangeAllNull(){
         return this.punishmentName==null
@@ -89,18 +103,19 @@ public class BankPunishment {
                 &&this.status==null;
     };
 
-    public boolean propertiesToInsertExistNull(){
-        return this.punishmentName==null
-                ||this.punishmentDocNo==null
-                ||this.punishmentType==null
-                ||this.punishedPartyName==null
-                ||this.mainResponsibleName==null
-                ||this.mainIllegalFact==null
-                ||this.punishmentBasis==null
-                ||this.punishmentDecision==null
-                ||this.punisherName==null
-                ||this.punishDate==null;
-    };
+    public boolean propertiesToInsertExistSpace(){
+        return isSpace(this.punishmentName)
+                ||isSpace(this.punishmentDocNo)
+                ||isSpace(this.punishmentType)
+                ||isSpace(this.punishedPartyName)
+                ||isSpace(this.mainResponsibleName)
+                ||isSpace(this.mainIllegalFact)
+                ||isSpace(this.punishmentBasis)
+                ||isSpace(this.punishmentDecision)
+                ||isSpace(this.punisherName)
+                ||isSpace(this.punishDate)
+                ||isSpace(this.status);
+    }
 
     public boolean punishmentTypeIsValid(){
         return this.punishmentType.equals("个人")||this.punishmentType.equals("单位");
@@ -109,4 +124,41 @@ public class BankPunishment {
     public boolean statusIsValid(){
         return  this.status.equals("0")||this.status.equals("1");
     }
+
+    public void reportInvalidProp() throws Exception{
+        if(!punishmentTypeIsValid()){
+            throw new Exception("punishment_type should be 个人 or 单位");
+        }
+        if(!statusIsValid()){
+            throw new Exception("status should be 0 or 1");
+        }
+    }
+
+    private boolean isSpace(String prop){
+        String spaceReg = "^\\s*$";
+        return prop==null||prop.matches(spaceReg);
+    }
+
+    private boolean isSpaceExceptNull(String prop){
+        String spaceReg = "^\\s*$";
+        return prop!=null&&prop.matches(spaceReg);
+    }
+
+//    public boolean propertiesToChangeExistNull(){
+//            return propertiesToInsertExistNull();
+//    };
+//
+//    public boolean propertiesToInsertExistNull(){
+//        return this.punishmentName==null
+//                ||this.punishmentDocNo==null
+//                ||this.punishmentType==null
+//                ||this.punishedPartyName==null
+//                ||this.mainResponsibleName==null
+//                ||this.mainIllegalFact==null
+//                ||this.punishmentBasis==null
+//                ||this.punishmentDecision==null
+//                ||this.punisherName==null
+//                ||this.punishDate==null
+//                ||this.status==null;
+//    };
 }
