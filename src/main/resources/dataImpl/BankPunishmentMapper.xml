@@ -87,10 +87,11 @@
         select * from bank_punishment
         <trim prefix="where" suffixOverrides="and">
             <if test="query.id!=null">id=#{query.id} and</if>
-            <if test="query.punishmentDocNo!=null">punishmentDocNo=#{query.punishmentDocNo} and</if>
             <if test="query.punishmentType!=null">punishmentType=#{query.punishmentType} and</if>
-            <if test="query.punishDate!=null">punishDate=#{query.punishDate} and</if>
             <if test="query.status!=null">status=#{query.status} and</if>
+            <if test="query.punishmentDocNo!=null">
+                punishmentDocNo like concat('%',#{query.punishmentDocNo,jdbcType=VARCHAR},'%') and
+            </if>
             <if test="query.punishmentName!=null">
                 punishmentName like concat('%',#{query.punishmentName,jdbcType=VARCHAR},'%') and
             </if>
@@ -107,10 +108,13 @@
                 punishmentBasis like concat('%',#{query.punishmentBasis,jdbcType=VARCHAR},'%') and
             </if>
             <if test="query.punishmentDecision!=null">
-                punishmentDecision like concat('%',#{query.punishmentDecision},'%') and
+                punishmentDecision like concat('%',#{query.punishmentDecision,jdbcType=VARCHAR},'%') and
             </if>
             <if test="query.punisherName!=null">
                 punisherName like concat('%',#{query.punisherName,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="query.punishDate!=null">
+                punishDate like concat('%',#{query.punishDate,jdbcType=VARCHAR},'%') and
             </if>
         </trim>
     </select>
