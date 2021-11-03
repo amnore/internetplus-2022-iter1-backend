@@ -89,7 +89,8 @@ public class BankPunishmentQueryVO {
     private String status;
 
     public boolean conditionAllNull(){
-        return this.punishmentName==null
+        return this.id==null
+                &&this.punishmentName==null
                 &&this.punishmentDocNo==null
                 &&this.punishmentType==null
                 &&this.punishedPartyName==null

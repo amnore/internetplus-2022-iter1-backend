@@ -161,4 +161,18 @@ public class BankPunishment {
 //                ||this.punishDate==null
 //                ||this.status==null;
 //    };
+
+    public String connectAllCondition(){
+        return this.punishmentName+
+                this.punishmentDocNo+
+                this.punishmentType+
+                this.punishedPartyName+
+                this.mainResponsibleName+
+                this.mainIllegalFact+
+                this.punishmentBasis+
+                this.punishmentDecision+
+                this.punisherName+
+                this.punishDate+
+                this.status;
+    }
 }

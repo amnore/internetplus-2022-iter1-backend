@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -162,14 +164,21 @@ public class bankPunishmentController {//解决方案：①另设string字段②
                 boolean queryOnly = query.conditionAllNull();
                 if(queryOnly){//搜索关键字不为空，筛选条件全null，则只是模糊搜索的模式
                     bankPunishments = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
-                }else {//模糊搜索和筛选结合，目前是取并集，未来可以改成取交集（感觉更符合直觉）
-                    List<BankPunishment> bankPunishmentsFromQuery = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
-                    List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
+                }else {//模糊搜索和筛选结合，有取并集和取交集两种方案，目前取交集
+//                    System.out.println("search with condition");
+                    //取并集
+//                    List<BankPunishment> bankPunishmentsFromQuery = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
+//                    List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
+//
+//                    bankPunishments = Stream.of(bankPunishmentsFromQuery, bankPunishmentsFromSelect)
+//                            .flatMap(Collection::stream)
+//                            .distinct()
+//                            .collect(Collectors.toList());
 
-                    bankPunishments = Stream.of(bankPunishmentsFromQuery, bankPunishmentsFromSelect)
-                            .flatMap(Collection::stream)
-                            .distinct()
-                            .collect(Collectors.toList());
+                    //取交集
+                    List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
+                    Pattern pattern = Pattern.compile(queryString);
+                    bankPunishments = bankPunishmentsFromSelect.stream().filter(b->pattern.matcher(b.connectAllCondition()).find()).collect(Collectors.toList());
                 }
 
             }
