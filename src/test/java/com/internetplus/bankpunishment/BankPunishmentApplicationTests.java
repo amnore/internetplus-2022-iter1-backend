@@ -22,6 +22,12 @@ class BankPunishmentApplicationTests {
 	void contextLoads() {
 		try{//测试已过时，需重写
 
+			List<BankPunishment> bankPunishments = bankPunishmentBl.selectBankPunishment(new BankPunishmentQueryVO());
+
+			for(int i=0;i<Math.min(100,bankPunishments.size());i++){
+				System.out.println(bankPunishments.get(i));
+			}
+
 //			//肉眼比对搜索全体的数量是否搜对
 //			int numInAll = bankPunishmentBl.selectBankPunishment(new BankPunishmentQueryVO()).size();
 //			System.out.println("initial size "+numInAll);//搜索全体

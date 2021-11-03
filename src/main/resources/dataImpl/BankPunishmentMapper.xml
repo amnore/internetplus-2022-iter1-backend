@@ -67,11 +67,11 @@
 
     <select id="selectBankPunishmentByFuzzyQuery" parameterType="java.lang.String"
             resultMap="BankPunishment">
-        select * from bank_punishment where concat(ifnull('punishmentName',''),
-            ifnull('punishmentDocNo',''), ifnull('punishmentType',''),
-            ifnull('punishedPartyName',''), ifnull('mainResponsibleName',''),
-            ifnull('mainIllegalFact',''), ifnull('punishmentBasis',''),
-            ifnull('punishmentDecision',''), ifnull('punisherName',''))
+        select * from bank_punishment where concat(ifnull(punishmentName,''),
+            ifnull(punishmentDocNo,''), ifnull(punishmentType,''),
+            ifnull(punishedPartyName,''), ifnull(mainResponsibleName,''),
+            ifnull(mainIllegalFact,''), ifnull(punishmentBasis,''),
+            ifnull(punishmentDecision,''), ifnull(punisherName,''))
             like concat('%',#{queryString},'%')
     </select>
 

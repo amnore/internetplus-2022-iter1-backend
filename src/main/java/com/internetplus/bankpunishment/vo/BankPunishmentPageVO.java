@@ -7,11 +7,11 @@ import java.util.List;
 
 @Data
 public class BankPunishmentPageVO {
-    private int maxPageNO;
+    private int resultSize;
     private List<BankPunishment> resList;
 
-    public BankPunishmentPageVO(int maxPageNO, List<BankPunishment> resList) {
-        this.maxPageNO = maxPageNO;
+    public BankPunishmentPageVO(int resultSize, List<BankPunishment> resList) {
+        this.resultSize = resultSize;
         this.resList = resList;
     }
 }
