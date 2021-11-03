@@ -33,4 +33,11 @@ public interface DataService {
      */
     List<BankPunishment> getDataListByPageNo(@WebParam(name = "pageSize") int pageSize,
                                              @WebParam(name = "pageNo") long pageNo) throws CustomerException;
+
+    /**
+     * 启动爬虫
+     *  * (需要安装 chromeDriver 驱动，然后在 application.yml 里面配置驱动的路径)
+     */
+    void startUpCrawler() throws CustomerException;
+
 }
