@@ -61,7 +61,7 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
                 bankPunishment.setPunishmentDecision(obj.get(7).toString());
                 bankPunishment.setPunisherName(obj.get(8).toString());
                 bankPunishment.setPunishDate(obj.get(9).toString());
-                bankPunishment.setStatus(obj.get(10).toString());
+                bankPunishment.setStatus(obj.get(10).toString().substring(0,1));
                 try {
                     Long res = insertBankPunishment(bankPunishment);
                     inserted_num++;
@@ -70,67 +70,6 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
                 }
 
             }
-//
-//            bankPunishment.setPunishmentName(obj.get(0).toString().equals("null")?null:obj.get(0).toString());
-//
-//            if (obj.size() <=1) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setPunishmentDocNo(obj.get(1).toString().equals("null")?null:obj.get(1).toString());
-//
-//            if (obj.size() <=2) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setPunishmentType(obj.get(2).toString().equals("null")?null:obj.get(2).toString());
-//
-//            if (obj.size() <=3) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setPunishedPartyName(obj.get(3).toString().equals("null")?null:obj.get(3).toString());
-//
-//            if (obj.size() <=4) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setMainResponsibleName(obj.get(4).toString().equals("null")?null:obj.get(4).toString());
-//
-//            if (obj.size() <=5) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setMainIllegalFact(obj.get(5).toString().equals("null")?null:obj.get(5).toString());
-//
-//            if (obj.size() <=6) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setPunishmentBasis(obj.get(1).toString().equals("null")?null:obj.get(6).toString());
-//
-//            if (obj.size() <=7) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setPunishmentDecision(obj.get(7).toString());
-//            if (obj.size() <=8) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setPunisherName(obj.get(8).toString());
-//            if (obj.size() <=9) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setPunishDate(obj.get(9).toString());
-//            if (obj.size() <=10) {
-//                Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
-//                continue;
-//            }
-//            bankPunishment.setStatus(obj.get(10).toString());
-//
-//            Integer res = bankPunishmentMapper.insertBankPunishment(bankPunishment);
         }
         if (list.size() != inserted_num) {
             throw new Exception("some rows has empty or null properties");

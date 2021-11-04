@@ -177,7 +177,7 @@ public class bankPunishmentController {//解决方案：①另设string字段②
 
                     //取交集
                     List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
-                    Pattern pattern = Pattern.compile(queryString);
+                    Pattern pattern = Pattern.compile(queryString,Pattern.CASE_INSENSITIVE);
                     bankPunishments = bankPunishmentsFromSelect.stream().filter(b->pattern.matcher(b.connectAllCondition()).find()).collect(Collectors.toList());
                 }
 
