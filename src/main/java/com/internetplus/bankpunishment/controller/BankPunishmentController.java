@@ -9,6 +9,7 @@ import com.internetplus.bankpunishment.po.TestPO;
 import com.internetplus.bankpunishment.utils.HandleFile;
 import com.internetplus.bankpunishment.vo.BankPunishmentPageVO;
 import com.internetplus.bankpunishment.vo.BankPunishmentQueryVO;
+import com.internetplus.bankpunishment.vo.BankPunishmentStasticsVO;
 import com.internetplus.bankpunishment.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,14 +38,14 @@ import java.util.stream.Stream;
 @Slf4j
 @RestController
 @RequestMapping("/api/bankpunishment")//由于long在前后端传有精度损失，要用string
-public class bankPunishmentController {//解决方案：①另设string字段②用fastjson转化；选fastjson
+public class BankPunishmentController {//解决方案：①另设string字段②用fastjson转化；选fastjson
 
     @Autowired
     BankPunishmentBl bankPunishmentBl;
 
     private final Integer defaultPageSize = 20;
-
     private final Integer defaultPageNo = 0;
+    private final Integer currentYear = 2021;
 
     @PostMapping("/insert")//发布状态由系统录入，即新建时一律尚未发布，前端传的state字段无用
     public ResultVO insertBankPunishment(@RequestBody BankPunishment bankPunishment) {
@@ -197,6 +199,32 @@ public class bankPunishmentController {//解决方案：①另设string字段②
             }
             BankPunishmentPageVO bankPunishmentPageVO = new BankPunishmentPageVO(max,resList);
             return ApiResult.success(bankPunishmentPageVO);
+        } catch (Exception e) {
+            return ApiResult.fail(e.getMessage());
+        }
+    }
+
+    @GetMapping("/statistics")
+    public ApiResult<BankPunishmentStasticsVO> bankPunishmentStastics() {
+
+        HashMap<Integer, Integer> punishDateStastics = new HashMap<>();
+        HashMap<String, Integer> punishmentTypeStastics = new HashMap<>();
+
+        try{
+            BankPunishmentQueryVO queryDate = new BankPunishmentQueryVO();
+            for (int i=2016; i<=currentYear; i++) {
+                queryDate.setPunishDate(String.valueOf(i));
+                punishDateStastics.put(i, bankPunishmentBl.selectBankPunishment(queryDate).size());
+            }
+
+            BankPunishmentQueryVO queryType = new BankPunishmentQueryVO();
+            queryType.setPunishmentType("个人");
+            punishmentTypeStastics.put("个人", bankPunishmentBl.selectBankPunishment(queryType).size());
+            queryType.setPunishmentType("企业");
+            punishmentTypeStastics.put("企业", bankPunishmentBl.selectBankPunishment(queryType).size());
+
+            BankPunishmentStasticsVO stasticsVO = new BankPunishmentStasticsVO(punishDateStastics, punishmentTypeStastics);
+            return ApiResult.success(stasticsVO);
         } catch (Exception e) {
             return ApiResult.fail(e.getMessage());
         }
