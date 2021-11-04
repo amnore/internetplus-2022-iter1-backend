@@ -160,7 +160,7 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
      *
      * 每次获取500条数据
      *      清洗规则：年份在 18xx 年的必定为假
-     *                              将违法行为类型改成个人或单位
+     *                              将违法行为类型改成个人或企业
      */
     public boolean filterDirtyBankPunishment() {
         long dataCount = bankPunishmentMapper.getBankPunishmentCount();
@@ -183,7 +183,7 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
                             (bankPunishment.getPunishmentType().equals("个人") || bankPunishment.getPunishmentType().equals("企业"))) {
                         continue;
                     }
-                    // 将违法行为类型改成个人或单位
+                    // 将违法行为类型改成个人或企业
                     if (bankPunishment.getPunishedPartyName() == null) {
                         // 如果 punishedPartyName 为空，则将其违法类型置为空
                         bankPunishment.setPunishmentType("");

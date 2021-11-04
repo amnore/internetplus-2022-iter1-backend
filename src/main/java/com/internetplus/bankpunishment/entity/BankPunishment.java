@@ -118,7 +118,7 @@ public class BankPunishment {
     }
 
     public boolean punishmentTypeIsValid(){
-        return this.punishmentType.equals("个人")||this.punishmentType.equals("单位");
+        return this.punishmentType.equals("个人")||this.punishmentType.equals("企业");
     }
 
     public boolean statusIsValid(){
@@ -127,7 +127,7 @@ public class BankPunishment {
 
     public void reportInvalidProp() throws Exception{
         if(!punishmentTypeIsValid()){
-            throw new Exception("punishment_type should be 个人 or 单位");
+            throw new Exception("punishment_type should be 个人 or 企业");
         }
         if(!statusIsValid()){
             throw new Exception("status should be 0 or 1");
@@ -162,7 +162,7 @@ public class BankPunishment {
 //                ||this.status==null;
 //    };
 
-    public String connectAllCondition(){
+    public String connectAllCondition(){//不搜索data和status
         return this.punishmentName+
                 this.punishmentDocNo+
                 this.punishmentType+
@@ -171,8 +171,6 @@ public class BankPunishment {
                 this.mainIllegalFact+
                 this.punishmentBasis+
                 this.punishmentDecision+
-                this.punisherName+
-                this.punishDate+
-                this.status;
+                this.punisherName;
     }
 }
