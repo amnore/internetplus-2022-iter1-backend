@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.internetplus.bankpunishment.data.CrawlerMapper">
+
+    <select id="getDataEntityListByOffsetAndLimit" resultMap="DataEntityMap">
+        select * from new_bank_punishment limit #{limitNum} offset #{offsetNum}
+    </select>
+
+    <select id="getDataEntityNum" resultType="java.lang.Long">
+        select count(`id`) from new_bank_punishment
+    </select>
+
+    <insert id="addCaseLibraryEntity" parameterType="com.internetplus.bankpunishment.crawler.pojo.CaseLibraryEntity">
+        insert into case_library (punishmentDocNo, punishedPersonName, punishedPartyName,
+                                  punishedPartyType, province, mainIllegalFact, punishmentLawName,
+                                  punishmentBasis, punishmentDecision, punishmentMoney, punisherName, punishDate)  values
+        (#{punishmentDocNo},#{punishedPersonName},#{punishedPartyName},
+         #{punishedPartyType},#{province},#{mainIllegalFact},#{punishmentLawName},
+         #{punishmentBasis},#{punishmentDecision},#{punishmentMoney},#{punisherName},#{punishDate})
+    </insert>
+
+
+    <resultMap id="DataEntityMap" type="com.internetplus.bankpunishment.crawler.pojo.DataEntity">
+        <id column="id" property="id"/>
+        <result column="punishmentName" property="punishmentName"/>
+        <result column="punishmentDocNo" property="punishmentDocNo"/>
+        <result column="punishmentType" property="punishmentType"/>
+        <result column="punishedPartyName" property="punishedPartyName"/>
+        <result column="mainResponsibleName" property="mainResponsibleName"/>
+        <result column="mainIllegalFact" property="mainIllegalFact"/>
+        <result column="punishmentBasis" property="punishmentBasis"/>
+        <result column="punishmentDecision" property="punishmentDecision"/>
+        <result column="punisherName" property="punisherName"/>
+        <result column="punishDate" property="punishDate"/>
+        <result column="province" property="province"/>
+    </resultMap>
+
+    <resultMap id="CaseLibraryMap" type="com.internetplus.bankpunishment.crawler.pojo.CaseLibraryEntity">
+        <id column="id" property="id"/>
+        <result column="punishmentDocNo" property="punishmentDocNo"/>
+        <result column="punishedPersonName" property="punishedPersonName"/>
+        <result column="punishedPartyName" property="punishedPartyName"/>
+        <result column="punishedPartyType" property="punishedPartyType"/>
+        <result column="province" property="province"/>
+        <result column="mainIllegalFact" property="mainIllegalFact"/>
+        <result column="punishmentLawName" property="punishmentLawName"/>
+        <result column="punishmentBasis" property="punishmentBasis"/>
+        <result column="punishmentDecision" property="punishmentDecision"/>
+        <result column="punishmentMoney" property="punishmentMoney"/>
+        <result column="punisherName" property="punisherName"/>
+        <result column="punishDate" property="punishDate"/>
+    </resultMap>
+</mapper>

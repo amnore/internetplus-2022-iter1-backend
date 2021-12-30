@@ -1,5 +1,6 @@
 package com.internetplus.bankpunishment.data;
 
+import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import com.internetplus.bankpunishment.vo.BankPunishmentQueryVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -44,4 +45,5 @@ public interface BankPunishmentMapper {
 
 
 
+    Long addCrawlerBankPunishment(DataEntity dataEntity);
 }

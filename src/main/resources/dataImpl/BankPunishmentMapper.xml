@@ -15,6 +15,20 @@
               #{bankPunishment.punishDate},#{bankPunishment.status})
     </insert>
 
+    <insert id="addCrawlerBankPunishment"  parameterType="com.internetplus.bankpunishment.crawler.pojo.DataEntity">
+        insert into new_bank_punishment(
+                                        punishmentName, punishmentDocNo, punishmentType,
+                                        punishedPartyName, mainResponsibleName, mainIllegalFact,
+                                        punishmentBasis, punishmentDecision, punisherName,
+                                        punishDate, province
+        ) VALUES (
+                             #{punishmentName},#{punishmentDocNo},#{punishmentType},
+                  #{punishedPartyName},#{mainResponsibleName},#{mainIllegalFact},
+                  #{punishmentBasis},#{punishmentDecision},#{punisherName},
+                  #{punishDate},#{province}
+                         )
+    </insert>
+
     <update id="updateBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment">
         update bank_punishment set
         punishmentName=#{bankPunishment.punishmentName},

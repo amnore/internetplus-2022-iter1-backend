@@ -15,6 +15,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class DataEntity {
+    private long id;
     public String punishmentName;
     public String punishmentDocNo;
     public String punishmentType;
@@ -25,6 +26,6 @@ public class DataEntity {
     public String punishmentDecision;
     public String punisherName;
     public String punishDate;
-
+    public static String province;
 
 }

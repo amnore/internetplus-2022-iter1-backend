@@ -84,11 +84,7 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
      */
     @Override
     public Long addCrawlerBankPunishment(DataEntity dataEntity) {
-        BankPunishment bankPunishment = new BankPunishment();
-        BeanUtils.copyProperties(dataEntity, bankPunishment);
-        bankPunishment.setStatus("1"); // 所有已经爬取的状态都是已发布
-        bankPunishmentMapper.insertBankPunishment(bankPunishment);
-        return bankPunishment.getId();
+        return bankPunishmentMapper.addCrawlerBankPunishment(dataEntity);
     }
 
     @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
