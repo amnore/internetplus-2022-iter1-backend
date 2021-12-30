@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.internetplus.bankpunishment.data.CaseStatisticsMapper">
+    <select id="getPunishedPartyAndMoney" resultType="java.util.LinkedHashMap">
+        select punishedPartyName as 'key', sum(punishmentMoney) as 'value'
+        from case_library
+        group by punishedPartyName
+        order by value desc;
+    </select>
+
+    <select id="getPunishedPartyAndTimes" resultType="java.util.LinkedHashMap">
+        select punishedPartyName as 'key', count(*) as 'value'
+        from case_library
+        group by punishedPartyName
+        order by value desc;
+    </select>
+
+    <select id="getPunisherNameAndMoney" resultType="java.util.LinkedHashMap">
+        select punisherName as 'key', sum(punishmentMoney) as 'value'
+        from case_library
+        group by punisherName
+        order by value desc;
+    </select>
+
+    <select id="getPunisherNameAndTimes" resultType="java.util.LinkedHashMap">
+        select punisherName as 'key', count(*) as 'value'
+        from case_library
+        group by punisherName
+        order by value desc;
+    </select>
+
+    <select id="getPunishDateAndTimes" resultType="java.util.LinkedHashMap">
+        select punishDate as 'key', count(*) as 'value'
+        from case_library
+        group by punishDate
+        order by value desc;
+    </select>
+
+    <select id="getYearAndAverageMoney" parameterType="java.lang.String" resultType="java.lang.Double">
+        select sum(punishmentMoney)/count(*)
+        from case_library
+        where punishDate like concat(#{year,jdbcType=VARCHAR},'%');
+    </select>
+
+    <select id="getProvinceAndTimes" resultType="java.util.LinkedHashMap">
+        select province as 'key', count(*) as 'value'
+        from case_library
+        group by province
+        order by value desc;
+    </select>
+</mapper>
