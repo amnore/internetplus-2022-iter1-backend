@@ -5,35 +5,41 @@
         select punishedPartyName as 'key', sum(punishmentMoney) as 'value'
         from case_library
         group by punishedPartyName
-        order by value desc;
+        order by value desc
+        limit 10;
     </select>
 
     <select id="getPunishedPartyAndTimes" resultType="java.util.LinkedHashMap">
         select punishedPartyName as 'key', count(*) as 'value'
         from case_library
+        where punishedPartyName is not null
         group by punishedPartyName
-        order by value desc;
+        order by value desc
+        limit 15;
     </select>
 
     <select id="getPunisherNameAndMoney" resultType="java.util.LinkedHashMap">
         select punisherName as 'key', sum(punishmentMoney) as 'value'
         from case_library
         group by punisherName
-        order by value desc;
+        order by value desc
+        limit 10;
     </select>
 
     <select id="getPunisherNameAndTimes" resultType="java.util.LinkedHashMap">
         select punisherName as 'key', count(*) as 'value'
         from case_library
         group by punisherName
-        order by value desc;
+        order by value desc
+        limit 10;
     </select>
 
     <select id="getPunishDateAndTimes" resultType="java.util.LinkedHashMap">
         select punishDate as 'key', count(*) as 'value'
         from case_library
         group by punishDate
-        order by value desc;
+        order by value desc
+        limit 10;
     </select>
 
     <select id="getYearAndAverageMoney" parameterType="java.lang.String" resultType="java.lang.Double">
