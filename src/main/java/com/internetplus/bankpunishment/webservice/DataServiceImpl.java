@@ -84,4 +84,8 @@ public class DataServiceImpl implements DataService {
                 //.run(); // 同步启动
     }
 
+    @Override
+    public List<BankPunishment> selectBankPunishmentByFuzzyQuery(String queryString) {
+        return bankPunishmentMapper.selectBankPunishmentByFuzzyQuery(queryString);
+    }
 }

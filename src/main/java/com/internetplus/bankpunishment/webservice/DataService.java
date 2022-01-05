@@ -40,4 +40,10 @@ public interface DataService {
      */
     void startUpCrawler() throws CustomerException;
 
+    /**
+     * 模糊查询
+     */
+    List<BankPunishment> selectBankPunishmentByFuzzyQuery(@WebParam(name = "queryString") String queryString);
+
+
 }

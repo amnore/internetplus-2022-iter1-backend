@@ -29,3 +29,4 @@ public class CaseLibraryEntity {
     private String punisherName; // 行政处罚的机关名称
     private String punishDate; // 作出处罚决定的日期
 }
+

@@ -33,13 +33,13 @@ public class Extracter {
     public void extract() {
         long count = crawlerMapper.getDataEntityNum();
         int currentNum = 0;
-        while (currentNum < count) {
-            List<DataEntity> dataEntityList = crawlerMapper.getDataEntityListByOffsetAndLimit(500, currentNum);
+        while (currentNum <= count) {
+            List<DataEntity> dataEntityList = crawlerMapper.getDataEntityListByOffsetAndLimit(100000, currentNum);
             dataEntityList.forEach(dataEntity -> {
                 CaseLibraryEntity caseLibraryEntity = dataEntity2CaseLibraryEntity(dataEntity);
                 crawlerMapper.addCaseLibraryEntity(caseLibraryEntity);
             });
-            currentNum += 500;
+            currentNum += 100000;
         }
     }
 
