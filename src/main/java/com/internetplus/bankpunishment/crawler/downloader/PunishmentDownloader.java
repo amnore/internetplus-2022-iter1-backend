@@ -11,17 +11,38 @@ import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.selector.PlainText;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Map;
 import java.util.Properties;
 
 /**
  * @author Yunthin.Chow
- * @version 1.0
- * Created by Yunthin.Chow on 2021/10/20
- * webmagic 爬虫工具的  downloader 组件
+ * @version 1.0 Created by Yunthin.Chow on 2021/10/20 webmagic 爬虫工具的 downloader
+ *          组件
  */
 public class PunishmentDownloader implements Downloader {
+    public static String downloadPath;
 
-    private final RemoteWebDriver driver;
+    static {
+        try {
+            downloadPath = Files.createTempDirectory("internetplus2021-crawler").toString();
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+    }
+
+    public static final ThreadLocal<RemoteWebDriver> driver = ThreadLocal.withInitial(() -> {
+        // 添加chrome的配置信息
+        ChromeOptions chromeOptions = new ChromeOptions();
+        // 设置为无头模式
+        chromeOptions.addArguments("--headless", "--window-size=800,600", "--disable-gpu");
+        chromeOptions.setExperimentalOption("prefs",
+                Map.ofEntries(Map.entry("download.default_directory", downloadPath),
+                        Map.entry("download.prompt_for_download", false), Map.entry("download.directory_upgrade", true),
+                        Map.entry("plugins.always_open_pdf_externally", true)));
+        // 使用配置信息 创建driver对象
+        return new ChromeDriver(chromeOptions);
+    });
 
     /**
      * Selenium 的一些驱动配置
@@ -35,24 +56,19 @@ public class PunishmentDownloader implements Downloader {
             e.printStackTrace();
         }
         String chromedriverPath = properties.getProperty("chrome-driver-path");
-        System.setProperty("webdriver.chrome.driver",chromedriverPath);
-        // 添加chrome的配置信息
-        ChromeOptions chromeOptions = new ChromeOptions();
-        // 设置为无头模式
-        chromeOptions.addArguments("--headless");
-        // 设置打开的窗口大小 非必要属性
-        chromeOptions.addArguments("--window-size=800,600");
-        // 使用配置信息 创建driver对象
-        this.driver = new ChromeDriver(chromeOptions);
+        // System.setProperty("webdriver.chrome.driver",chromedriverPath);
     }
 
     @Override
     public Page download(Request request, Task task) {
         // 获取 url ，用 driver 进行访问
         String url = request.getUrl();
+        RemoteWebDriver driver = this.driver.get();
         driver.get(url);
         // 将访问的结果封装成 page 对象返回
-        return createPage(driver.getPageSource(), driver.getCurrentUrl(), request);
+        Page page = createPage(driver.getPageSource(), driver.getCurrentUrl(), request);
+
+        return page;
     }
 
     /**
@@ -73,5 +89,6 @@ public class PunishmentDownloader implements Downloader {
     }
 
     @Override
-    public void setThread(int i) {}
+    public void setThread(int i) {
+    }
 }

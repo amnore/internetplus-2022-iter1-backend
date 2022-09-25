@@ -8,6 +8,9 @@ import com.internetplus.bankpunishment.crawler.processor.handler.PunishmentListP
 import com.internetplus.bankpunishment.crawler.processor.handler.PunishmentDetailPageHandler;
 import com.internetplus.bankpunishment.crawler.target.PageTarget;
 import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -21,9 +24,12 @@ import us.codecraft.webmagic.processor.PageProcessor;
  */
 @Slf4j
 public class PunishmentProcessor implements PageProcessor {
+    static final Logger logger = LoggerFactory.getLogger(PunishmentProcessor.class);
 
     @Override
     public void process(Page page) {
+        logger.info("processing page {}", page.getUrl());
+
         // 获取页面的目标
         String target = page.getRequest().getExtra("target").toString();
         switch (target) {

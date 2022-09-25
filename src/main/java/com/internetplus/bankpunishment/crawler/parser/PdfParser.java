@@ -32,6 +32,7 @@ public class PdfParser {
     public static List<DataEntity> parsePdf2DataEntity(String pdfPath) {
         // pdf 识别成 jsonString
         String jsonString = parsePdf2Json(pdfPath);
+        // System.err.println(jsonString);
         // 使用 fastJson 将 Json 转换成 PdfTableParseResult
         List<PdfTable> tableList = JSON.parseArray(jsonString, PdfTable.class);
         return extractDataEntityFromTableList(tableList);
@@ -83,13 +84,13 @@ public class PdfParser {
      */
     private static String parsePdf2Json(String pdfPath) {
         StringBuilder jsonResultStringBuilder = new StringBuilder();
-        String[] args = {pdfPath, "-l", "-f=JSON", "-p=all"};
+        String[] args = {pdfPath, "-g", "-l", "-f=JSON", "-p=all"};
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine cmd = parser.parse(CommandLineApp.buildOptions(), args);
             new CommandLineApp(jsonResultStringBuilder, cmd).extractTables(cmd);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new Error(e);
         }
         return jsonResultStringBuilder.toString();
     }
