@@ -1,6 +1,5 @@
 package com.internetplus.bankpunishment.bl;
 
-import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import com.internetplus.bankpunishment.vo.BankPunishmentQueryVO;
 import org.apache.ibatis.annotations.Param;
@@ -17,8 +16,6 @@ public interface BankPunishmentBl {
     Long insertBankPunishment(BankPunishment bankPunishment) throws Exception;
 
     public Integer uploadBankPunishmentByExcel(List<List<Object>> list) throws Exception;
-
-    Long addCrawlerBankPunishment(DataEntity dataEntity);
 
     boolean updateBankPunishment(BankPunishment bankPunishment) throws Exception;
 

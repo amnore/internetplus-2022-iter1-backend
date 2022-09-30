@@ -1,11 +1,12 @@
 package com.internetplus.bankpunishment.crawler.processor.handler;
 
 import com.internetplus.bankpunishment.bl.BankPunishmentBl;
+import com.internetplus.bankpunishment.crawler.extracter.Extracter;
 import com.internetplus.bankpunishment.crawler.parser.DocParser;
 import com.internetplus.bankpunishment.crawler.parser.HtmlParser;
 import com.internetplus.bankpunishment.crawler.parser.PdfParser;
-import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
 import com.internetplus.bankpunishment.crawler.util.CrawlerHelper;
+import com.internetplus.bankpunishment.entity.BankPunishment;
 import com.internetplus.bankpunishment.crawler.parser.ExcelParser;
 import com.internetplus.bankpunishment.crawler.parser.DocxParser;
 
@@ -18,6 +19,7 @@ import us.codecraft.webmagic.selector.Html;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author Yunthin.Chow
@@ -33,6 +35,10 @@ public class PunishmentDetailPageHandler implements ProcessHandler {
 
     static final Logger logger = LoggerFactory.getLogger(PunishmentDetailPageHandler.class);
 
+    static final Map<String, Function<String, List<BankPunishment>>> parseFunc = Map.ofEntries(Map.entry(".xls", ExcelParser::parseExcel2DataEntity),
+                Map.entry(".doc", DocParser::parseExcel2DataEntity), Map.entry(".docx", DocxParser::parseExcel2DataEntity),
+                Map.entry(".pdf", PdfParser::parsePdf2DataEntity));
+
     @Autowired
     public void setBankPunishmentBl(BankPunishmentBl bankPunishmentBl) {
         PunishmentDetailPageHandler.bankPunishmentBl = bankPunishmentBl;
@@ -42,94 +48,61 @@ public class PunishmentDetailPageHandler implements ProcessHandler {
     public void process(Page page) {
         Html html = page.getHtml();
         String fileUrl = html.xpath("//p/a").links().get();
-        if (fileUrl == null || fileUrl.isEmpty()) {
-            // 直接解析页面 html
-            this.parseHtml(page);
-        } else {
-            Map<String, Consumer<String>> parseFunc = Map.ofEntries(Map.entry(".xls", this::parseExcel),
-                    Map.entry(".doc", this::parseDoc), Map.entry(".docx", this::parseDocx),
-                    Map.entry(".pdf", this::parsePdf));
+        Function<String, List<BankPunishment>> parser = null;
 
+        if (fileUrl != null && !fileUrl.isEmpty()) {
             String suffix = fileUrl.substring(fileUrl.lastIndexOf('.'));
             if (suffix.endsWith("#")) {
                 suffix = suffix.substring(0, suffix.length() - 1);
             }
 
-            try {
-                if (parseFunc.containsKey(suffix)) {
-                    String filePath = null;
-                    try {
-                        // 下载文件，解析文件
-                        filePath = CrawlerHelper.downloadFromUrl(fileUrl);
-                        // 调用具体的文件解析工具进行解析
-                        parseFunc.get(suffix).accept(filePath);
-                    } finally {
-                        // 解析完了之后删除文件
-                        CrawlerHelper.deleteFile(filePath);
-                    }
-                } else {
-                    this.parseHtml(page);
+            parser = parseFunc.get(suffix);
+        }
+
+        Consumer<List<BankPunishment>> processAndSave = entities -> {
+            entities.forEach(Extracter::dataEntity2CaseLibraryEntity);
+            saveDataEntityList(entities);
+        };
+
+        try {
+            if (parser != null) {
+                String filePath = null;
+                try {
+                    // 下载文件，解析文件
+                    filePath = CrawlerHelper.downloadFromUrl(fileUrl);
+                    // 调用具体的文件解析工具进行解析
+                    List<BankPunishment> entities = parser.apply(filePath);
+                    processAndSave.accept(entities);
+                } finally {
+                    // 解析完了之后删除文件
+                    CrawlerHelper.deleteFile(filePath);
                 }
-            } catch (InvalidFormatException e) {
-                logger.warn("invalid format when parsing {}: {}", fileUrl, e.getMessage());
+            } else {
+                List<BankPunishment> entities = HtmlParser.parseHtml2DataEntity(page);
+                processAndSave.accept(entities);
             }
+        } catch (InvalidFormatException e) {
+            logger.warn("invalid format when parsing {}: {}", fileUrl, e.getMessage());
         }
     }
 
     /**
      * 对解析出来的 dataEntity 列表进行持久化
      */
-    private void saveDataEntityList(List<DataEntity> dataEntityList) {
-        for (DataEntity dataEntity : dataEntityList) {
+    private void saveDataEntityList(List<BankPunishment> dataEntityList) {
+        for (BankPunishment dataEntity : dataEntityList) {
             // 首先通过日期是否合法对数据进行一个筛选
             if (dataEntity.getPunishDate() != null && dataEntity.getPunishDate().contains("-")
                     && dataEntity.getPunishDate().indexOf("-") != dataEntity.getPunishDate().lastIndexOf("-")) {
-                bankPunishmentBl.addCrawlerBankPunishment(dataEntity);
+                try {
+                    bankPunishmentBl.insertBankPunishment(dataEntity);
+                } catch(Exception e) {
+                    throw new Error(e);
+                }
             } else {
                 throw new InvalidFormatException(String.format("invalid date in \"%s\"", dataEntity));
             }
         }
-    }
-
-    /**
-     * 直接对 html 页面进行解析
-     */
-    private void parseHtml(Page page) {
-        List<DataEntity> dataEntityList = HtmlParser.parseHtml2DataEntity(page);
-        this.saveDataEntityList(dataEntityList);
-    }
-
-    /**
-     * 对 pdf 文件进行解析
-     */
-    private void parsePdf(String filePath) {
-        List<DataEntity> dataEntityList = PdfParser.parsePdf2DataEntity(filePath);
-        this.saveDataEntityList(dataEntityList);
-    }
-
-    /**
-     * 对 doc 文件进行解析
-     */
-    private void parseDoc(String filePath) {
-        List<DataEntity> dataEntityList = DocParser.parseExcel2DataEntity(filePath);
-        this.saveDataEntityList(dataEntityList);
-    }
-
-    /**
-     * 对 docx 文件进行解析
-     */
-    private void parseDocx(String filePath) {
-        List<DataEntity> dataEntityList = DocxParser.parseExcel2DataEntity(filePath);
-        this.saveDataEntityList(dataEntityList);
-    }
-
-    /**
-     * 对 excel 文件进行解析
-     */
-    private void parseExcel(String filePath) {
-        // 是一个 excel 文件 (xls 或 xlsx)
-        List<DataEntity> dataEntityList = ExcelParser.parseExcel2DataEntity(filePath);
-        this.saveDataEntityList(dataEntityList);
     }
 
     static class InvalidFormatException extends RuntimeException {

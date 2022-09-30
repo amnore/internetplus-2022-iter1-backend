@@ -1,7 +1,6 @@
 package com.internetplus.bankpunishment.bl.blImpl;
 
 import com.internetplus.bankpunishment.bl.BankPunishmentBl;
-import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
 import com.internetplus.bankpunishment.data.BankPunishmentMapper;
 import com.internetplus.bankpunishment.entity.BankPunishment;
 import com.internetplus.bankpunishment.vo.BankPunishmentQueryVO;
@@ -28,19 +27,13 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     BankPunishmentMapper bankPunishmentMapper;
 
     @Override
-    public Long insertBankPunishment(BankPunishment bankPunishment) throws Exception{
-        boolean propertiesExistSpace = bankPunishment.propertiesToInsertExistSpace();//经考虑，仍检查status属性
-        if(propertiesExistSpace){
-            throw new Exception("properties can't be space(including null and empty)");
-        }
-        //在controller层设置0，bl层仍检验status，使insert与update有一致性
-        bankPunishment.reportInvalidProp();
+    public Long insertBankPunishment(BankPunishment bankPunishment) {
         bankPunishmentMapper.insertBankPunishment(bankPunishment);//成功插入时返回1
         return bankPunishment.getId();//主键会映射到id变量里
     }
 
     @Override
-    public Integer uploadBankPunishmentByExcel(List<List<Object>> list) throws Exception{
+    public Integer uploadBankPunishmentByExcel(List<List<Object>> list) {
         int inserted_num = 0;
         for (int i = 0; i < list.size(); i++) {
             List<Object> obj = list.get(i);
@@ -72,28 +65,14 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
             }
         }
         if (list.size() != inserted_num) {
-            throw new Exception("some rows has empty or null properties");
+            throw new Error("some rows has empty or null properties");
         }
 
         return 1;
     }
 
-
-    /**
-     * 添加爬虫获取的数据对象到数据库
-     */
-    @Override
-    public Long addCrawlerBankPunishment(DataEntity dataEntity) {
-        return bankPunishmentMapper.addCrawlerBankPunishment(dataEntity);
-    }
-
     @Override//考虑到可能有发布后修改的需求，此处的更新不对状态做限制
     public boolean updateBankPunishment(BankPunishment bankPunishment) throws Exception{//全部字段强制覆盖
-        boolean propertiesExistSpace = bankPunishment.propertiesForceChangeExistSpace();
-        if(propertiesExistSpace){
-            throw new Exception("properties can't be space(including null and empty)");
-        }
-        bankPunishment.reportInvalidProp();
         Integer changedNum = bankPunishmentMapper.updateBankPunishment(bankPunishment);
         System.out.println("changeNum: "+changedNum);
         return changedNum==1;
@@ -103,13 +82,8 @@ public class BankPunishmentBlImpl implements BankPunishmentBl {
     public boolean updateBankPunishmentExceptNull(BankPunishment bankPunishment) throws Exception{//某字段若为null则不更新该字段
         boolean propertiesAllNull = bankPunishment.propertiesToChangeAllNull();
         if(propertiesAllNull){//若全为空，则动态sql中的set语句为空，将报错
-            throw new Exception("there should be at least one property not null to be changed");
+            return false;
         }
-        boolean propertiesExistSpace = bankPunishment.propertiesPartChangeExistSpace();
-        if(propertiesExistSpace){
-            throw new Exception("properties to be changed can't be space(including null and empty)");
-        }
-        bankPunishment.reportInvalidProp();
         Integer changedNum = bankPunishmentMapper.updateBankPunishmentExceptNull(bankPunishment);
         System.out.println("changeNum: "+changedNum);
         return changedNum==1;

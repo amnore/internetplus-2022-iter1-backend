@@ -1,7 +1,8 @@
 package com.internetplus.bankpunishment.crawler.parser;
 
-import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
-import com.internetplus.bankpunishment.crawler.util.pojo.DataFieldHelper;
+import com.internetplus.bankpunishment.crawler.util.DataFieldHelper;
+import com.internetplus.bankpunishment.entity.BankPunishment;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -43,7 +44,7 @@ public class ExcelParser {
      *
      * @return 返回解析出来的 List<DataEntity>
      */
-    public static List<DataEntity> parseExcel2DataEntity(String excelPath) {
+    public static List<BankPunishment> parseExcel2DataEntity(String excelPath) {
         File excel = new File(excelPath);
         String postfix = excel.getName().split("\\.")[1];
         Workbook wb = getWorkbookByFilePostfix(postfix, excel);
@@ -55,7 +56,7 @@ public class ExcelParser {
         int lastRowIndex = sheet.getLastRowNum();
 
         List<String> fieldNameList = new ArrayList<>(12);// Excel 文件中，各个字段出现的顺序
-        List<DataEntity> dataEntityList = new ArrayList<>();
+        List<BankPunishment> dataEntityList = new ArrayList<>();
         boolean findHeader = false; // 是否已经发现表头
         int dataColOffset = 0; // 数据项的列数偏移量（有些 excel 文件，前几列是空的）
         boolean isOffsetTested = false; // 是否已经测量过数据偏移量 （不能直接根据 dataColOffset 等不等于0判断，因为有空数据）
@@ -64,7 +65,7 @@ public class ExcelParser {
             Row row = sheet.getRow(rIndex);
             if (row == null) continue;
             int lastCellIndex = row.getLastCellNum();
-            DataEntity dataEntity = new DataEntity(); // 待添加的对象
+            BankPunishment dataEntity = new BankPunishment(); // 待添加的对象
             if (!findHeader) {
                 // 首先找表头, 遍历列
                 for (int cIndex = 0; cIndex < lastCellIndex; ++cIndex) {

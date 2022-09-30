@@ -1,7 +1,7 @@
 package com.internetplus.bankpunishment.crawler.parser;
 
-import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
-import com.internetplus.bankpunishment.crawler.util.pojo.DataFieldHelper;
+import com.internetplus.bankpunishment.crawler.util.DataFieldHelper;
+import com.internetplus.bankpunishment.entity.BankPunishment;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 public class HtmlParser {
     static final Logger logger = LoggerFactory.getLogger(HtmlParser.class);
 
-    public static List<DataEntity> parseHtml2DataEntity(Page page) {
-        List<DataEntity> dataEntityList = new ArrayList<>(); // 待返回的结果
+    public static List<BankPunishment> parseHtml2DataEntity(Page page) {
+        List<BankPunishment> dataEntityList = new ArrayList<>(); // 待返回的结果
 
         for (Selectable table : page.getHtml().$("tbody").nodes()) {
             if (!table.$("table").nodes().isEmpty()) {
@@ -59,7 +59,7 @@ public class HtmlParser {
             try {
                 // 现在将 dataArray 中的数据封装成 dataEntity 对象
                 for (ArrayList<String> rowStrings : dataArray) {
-                    DataEntity dataEntity = new DataEntity();
+                    BankPunishment dataEntity = new BankPunishment();
                     for (int i = 0; i < rowStrings.size(); i++) {
                         String value = rowStrings.get(i);
                         // 接下来每一行都是表格数据

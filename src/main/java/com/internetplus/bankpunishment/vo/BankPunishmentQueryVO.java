@@ -83,10 +83,18 @@ public class BankPunishmentQueryVO {
      */
     private String punishDate;
 
+    // 省份
+    private String province;
+
     /**
      * 状态：0.未发布 1.已发布
      */
     private String status;
+
+    private String punishmentLawName;
+    private String punishedPersonName;
+    private Double punishmentMoney;
+    private String punishedBusinessName;
 
     public boolean conditionAllNull(){
         return this.id==null
@@ -100,6 +108,11 @@ public class BankPunishmentQueryVO {
                 &&this.punishmentDecision==null
                 &&this.punisherName==null
                 &&this.punishDate==null
-                &&this.status==null;
+                &&this.province==null
+                &&this.status==null
+                &&this.punishmentLawName==null
+                &&this.punishedPersonName==null
+                &&this.punishmentMoney==null
+                &&this.punishedBusinessName==null;
     }
 }

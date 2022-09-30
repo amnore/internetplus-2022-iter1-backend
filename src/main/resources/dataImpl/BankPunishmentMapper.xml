@@ -3,64 +3,85 @@
 <mapper namespace="com.internetplus.bankpunishment.data.BankPunishmentMapper">
     <insert id="insertBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment"
             keyProperty="id"  useGeneratedKeys="true">
-      INSERT INTO bank_punishment(
-               punishmentName, punishmentDocNo,punishmentType,
-               punishedPartyName,mainResponsibleName, mainIllegalFact,
-               punishmentBasis,punishmentDecision,punisherName
-               ,punishDate,status)
-      VALUES (
-              #{bankPunishment.punishmentName},#{bankPunishment.punishmentDocNo},#{bankPunishment.punishmentType},
-              #{bankPunishment.punishedPartyName},#{bankPunishment.mainResponsibleName},#{bankPunishment.mainIllegalFact},
-              #{bankPunishment.punishmentBasis},#{bankPunishment.punishmentDecision},#{bankPunishment.punisherName},
-              #{bankPunishment.punishDate},#{bankPunishment.status})
+      insert into bank_punishment(
+          punishmentName, punishmentDocNo, punishmentType,
+          punishedPartyName, mainResponsibleName, mainIllegalFact,
+          punishmentBasis,punishmentDecision,punisherName,
+          punishDate,province,status,
+          punishedPersonName,punishmentMoney,punishmentLawName,
+          punishedBusinessName
+      )
+      values (
+          #{punishmentName},#{punishmentDocNo},#{punishmentType},
+          #{punishedPartyName},#{mainResponsibleName},#{mainIllegalFact},
+          #{punishmentBasis},#{punishmentDecision},#{punisherName},
+          #{punishDate},#{province},#{status},
+          #{punishedPersonName},#{punishmentMoney},#{punishmentLawName},
+          #{punishedBusinessName}
+      )
     </insert>
 
-    <insert id="addCrawlerBankPunishment"  parameterType="com.internetplus.bankpunishment.crawler.pojo.DataEntity">
-        insert into new_bank_punishment(
-                                        punishmentName, punishmentDocNo, punishmentType,
-                                        punishedPartyName, mainResponsibleName, mainIllegalFact,
-                                        punishmentBasis, punishmentDecision, punisherName,
-                                        punishDate, province
-        ) VALUES (
-                             #{punishmentName},#{punishmentDocNo},#{punishmentType},
-                  #{punishedPartyName},#{mainResponsibleName},#{mainIllegalFact},
-                  #{punishmentBasis},#{punishmentDecision},#{punisherName},
-                  #{punishDate},#{province}
-                         )
+    <insert id="addCrawlerBankPunishment"  parameterType="com.internetplus.bankpunishment.entity.BankPunishment">
+        insert into bank_punishment(
+            punishmentName, punishmentDocNo, punishmentType,
+            punishedPartyName, mainResponsibleName, mainIllegalFact,
+            punishmentBasis, punishmentDecision, punisherName,
+            punishDate, province, status,
+            punishedPersonName,punishmentMoney,punishmentLawName,
+            punishedBusinessName
+        )
+        values (
+            #{punishmentName},#{punishmentDocNo},#{punishmentType},
+            #{punishedPartyName},#{mainResponsibleName},#{mainIllegalFact},
+            #{punishmentBasis},#{punishmentDecision},#{punisherName},
+            #{punishDate},#{province},#{status},
+            #{punishedPersonName},#{punishmentMoney},#{punishmentLawName},
+            #{punishedBusinessName}
+        )
     </insert>
 
     <update id="updateBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment">
         update bank_punishment set
-        punishmentName=#{bankPunishment.punishmentName},
-        punishmentDocNo=#{bankPunishment.punishmentDocNo},
-        punishmentType=#{bankPunishment.punishmentType},
-        punishedPartyName=#{bankPunishment.punishedPartyName},
-        mainResponsibleName=#{bankPunishment.mainResponsibleName},
-        mainIllegalFact=#{bankPunishment.mainIllegalFact},
-        punishmentBasis=#{bankPunishment.punishmentBasis},
-        punishmentDecision=#{bankPunishment.punishmentDecision},
-        punisherName=#{bankPunishment.punisherName},
-        punishDate=#{bankPunishment.punishDate},
-        status=#{bankPunishment.status}
-        where id = #{bankPunishment.id}
+            punishmentName=#{punishmentName},
+            punishmentDocNo=#{punishmentDocNo},
+            punishmentType=#{punishmentType},
+            punishedPartyName=#{punishedPartyName},
+            mainResponsibleName=#{mainResponsibleName},
+            mainIllegalFact=#{mainIllegalFact},
+            punishmentBasis=#{punishmentBasis},
+            punishmentDecision=#{punishmentDecision},
+            punisherName=#{punisherName},
+            punishDate=#{punishDate},
+            province=#{province},
+            status=#{status},
+            punishedPersonName=#{punishedPersonName},
+            punishmentMoney=#{punishmentMoney},
+            punishmentLawName=#{punishmentLawName},
+            punishedBusinessName=#{punishedBusinessName}
+        where id = #{id}
     </update>
 
     <update id="updateBankPunishmentExceptNull" parameterType="com.internetplus.bankpunishment.entity.BankPunishment">
         update bank_punishment
         <trim prefix="set" suffixOverrides=",">
-            <if test="bankPunishment.punishmentName!=null">punishmentName=#{bankPunishment.punishmentName},</if>
-            <if test="bankPunishment.punishmentDocNo!=null">punishmentDocNo=#{bankPunishment.punishmentDocNo},</if>
-            <if test="bankPunishment.punishmentType!=null">punishmentType=#{bankPunishment.punishmentType},</if>
-            <if test="bankPunishment.punishedPartyName!=null">punishedPartyName=#{bankPunishment.punishedPartyName},</if>
-            <if test="bankPunishment.mainResponsibleName!=null">mainResponsibleName=#{bankPunishment.mainResponsibleName},</if>
-            <if test="bankPunishment.mainIllegalFact!=null">mainIllegalFact=#{bankPunishment.mainIllegalFact},</if>
-            <if test="bankPunishment.punishmentBasis!=null">punishmentBasis=#{bankPunishment.punishmentBasis},</if>
-            <if test="bankPunishment.punishmentDecision!=null">punishmentDecision=#{bankPunishment.punishmentDecision},</if>
-            <if test="bankPunishment.punisherName!=null">punisherName=#{bankPunishment.punisherName},</if>
-            <if test="bankPunishment.punishDate!=null">punishDate=#{bankPunishment.punishDate},</if>
-            <if test="bankPunishment.status!=null">status=#{bankPunishment.status},</if>
+            <if test="punishmentName!=null">punishmentName=#{punishmentName},</if>
+            <if test="punishmentDocNo!=null">punishmentDocNo=#{punishmentDocNo},</if>
+            <if test="punishmentType!=null">punishmentType=#{punishmentType},</if>
+            <if test="punishedPartyName!=null">punishedPartyName=#{punishedPartyName},</if>
+            <if test="mainResponsibleName!=null">mainResponsibleName=#{mainResponsibleName},</if>
+            <if test="mainIllegalFact!=null">mainIllegalFact=#{mainIllegalFact},</if>
+            <if test="punishmentBasis!=null">punishmentBasis=#{punishmentBasis},</if>
+            <if test="punishmentDecision!=null">punishmentDecision=#{punishmentDecision},</if>
+            <if test="punisherName!=null">punisherName=#{punisherName},</if>
+            <if test="punishDate!=null">punishDate=#{punishDate},</if>
+            <if test="province!=null">province=${province},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="punishmentMoney!=null">punishmentMoney=#{punishmentMoney},</if>
+            <if test="punishedPersonName!=null">punishedPersonName=#{punishedPersonName},</if>
+            <if test="punishmentLawName!=null">punishmentLawName=#{punishmentLawName},</if>
+            <if test="punishedBusinessName!=null">punishedBusinessName=#{punishedBusinessName},</if>
         </trim>
-        where id = #{bankPunishment.id}
+        where id = #{id}
     </update>
 
     <update id="publishBankPunishment">
@@ -85,8 +106,8 @@
             ifnull(punishmentDocNo,''), ifnull(punishmentType,''),
             ifnull(punishedPartyName,''), ifnull(mainResponsibleName,''),
             ifnull(mainIllegalFact,''), ifnull(punishmentBasis,''),
-            ifnull(punishmentDecision,''), ifnull(punisherName,''))
-            like concat('%',#{queryString},'%')
+            ifnull(punishmentDecision,''), ifnull(punisherName,'')), ifnull(province, '')
+        like concat('%',#{queryString},'%')
     </select>
 
     <select id="getBankPunishmentCount" resultType="java.lang.Long">
@@ -100,35 +121,50 @@
     <select id="selectBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment" resultMap="BankPunishment">
         select * from bank_punishment
         <trim prefix="where" suffixOverrides="and">
-            <if test="query.id!=null">id=#{query.id} and</if>
-            <if test="query.punishmentType!=null">punishmentType=#{query.punishmentType} and</if>
-            <if test="query.status!=null">status=#{query.status} and</if>
-            <if test="query.punishmentDocNo!=null">
-                punishmentDocNo like concat('%',#{query.punishmentDocNo,jdbcType=VARCHAR},'%') and
+            <if test="id!=null">id=#{id} and</if>
+            <if test="punishmentType!=null">punishmentType=#{punishmentType} and</if>
+            <if test="status!=null">status=#{status} and</if>
+            <if test="punishmentDocNo!=null">
+                punishmentDocNo like concat('%',#{punishmentDocNo,jdbcType=VARCHAR},'%') and
             </if>
-            <if test="query.punishmentName!=null">
-                punishmentName like concat('%',#{query.punishmentName,jdbcType=VARCHAR},'%') and
+            <if test="punishmentName!=null">
+                punishmentName like concat('%',#{punishmentName,jdbcType=VARCHAR},'%') and
             </if>
-            <if test="query.punishedPartyName!=null">
-                punishedPartyName like concat('%',#{query.punishedPartyName,jdbcType=VARCHAR},'%') and
+            <if test="punishedPartyName!=null">
+                punishedPartyName like concat('%',#{punishedPartyName,jdbcType=VARCHAR},'%') and
             </if>
-            <if test="query.mainResponsibleName!=null">
-                mainResponsibleName like concat('%',#{query.mainResponsibleName,jdbcType=VARCHAR},'%') and
+            <if test="mainResponsibleName!=null">
+                mainResponsibleName like concat('%',#{mainResponsibleName,jdbcType=VARCHAR},'%') and
             </if>
-            <if test="query.mainIllegalFact!=null">
-                mainIllegalFact like concat('%',#{query.mainIllegalFact,jdbcType=VARCHAR},'%') and
+            <if test="mainIllegalFact!=null">
+                mainIllegalFact like concat('%',#{mainIllegalFact,jdbcType=VARCHAR},'%') and
             </if>
-            <if test="query.punishmentBasis!=null">
-                punishmentBasis like concat('%',#{query.punishmentBasis,jdbcType=VARCHAR},'%') and
+            <if test="punishmentBasis!=null">
+                punishmentBasis like concat('%',#{punishmentBasis,jdbcType=VARCHAR},'%') and
             </if>
-            <if test="query.punishmentDecision!=null">
-                punishmentDecision like concat('%',#{query.punishmentDecision,jdbcType=VARCHAR},'%') and
+            <if test="punishmentDecision!=null">
+                punishmentDecision like concat('%',#{punishmentDecision,jdbcType=VARCHAR},'%') and
             </if>
-            <if test="query.punisherName!=null">
-                punisherName like concat('%',#{query.punisherName,jdbcType=VARCHAR},'%') and
+            <if test="punisherName!=null">
+                punisherName like concat('%',#{punisherName,jdbcType=VARCHAR},'%') and
             </if>
-            <if test="query.punishDate!=null">
-                punishDate like concat('%',#{query.punishDate,jdbcType=VARCHAR},'%') and
+            <if test="punishDate!=null">
+                punishDate like concat('%',#{punishDate,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="province!=null">
+                province like concat('%',#{province,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="punishmentLawName!=null">
+                punishmentLawName like concat('%',#{punishmentLawName,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="punishedPersonName!=null">
+                punishedPersonName like concat('%',#{punishedPersonName,jdbcType=VARCHAR},'%') and
+            </if>
+            <if test="punishmentMoney!=null">
+                punishmentMoney = #{punishedMoney} and
+            </if>
+            <if test="punishedBusinessName!=null">
+                punishedBusinessName like concat('%',#{punishedBusinessName,jdbcType=VARCHAR},'%') and
             </if>
         </trim>
     </select>
@@ -145,6 +181,11 @@
         <result column="punishmentDecision" property="punishmentDecision"/>
         <result column="punisherName" property="punisherName"/>
         <result column="punishDate" property="punishDate"/>
+        <result column="province" property="province"/>
+        <result column="punishmentLawName" property="punishmentLawName"/>
+        <result column="punishedPersonName" property="punishedPersonName"/>
+        <result column="punishmentMoney" property="punishmentMoney"/>
+        <result column="punishedBusinessName" property="punishedBusinessName"/>
         <result column="status" property="status"/>
     </resultMap>
 </mapper>

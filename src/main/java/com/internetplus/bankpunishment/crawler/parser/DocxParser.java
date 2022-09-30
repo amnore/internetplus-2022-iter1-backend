@@ -1,7 +1,8 @@
 package com.internetplus.bankpunishment.crawler.parser;
 
-import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
-import com.internetplus.bankpunishment.crawler.util.pojo.DataFieldHelper;
+import com.internetplus.bankpunishment.crawler.util.DataFieldHelper;
+import com.internetplus.bankpunishment.entity.BankPunishment;
+
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
@@ -19,8 +20,8 @@ import java.util.List;
  */
 public class DocxParser {
 
-    public static List<DataEntity> parseExcel2DataEntity(String filePath) {
-        List<DataEntity> dataEntityList = new ArrayList<>(); // 待返回的结果
+    public static List<BankPunishment> parseExcel2DataEntity(String filePath) {
+        List<BankPunishment> dataEntityList = new ArrayList<>(); // 待返回的结果
         List<String> fieldNameList = new ArrayList<>(12); // 表头字段的名称列表
         boolean findHeader = false; // 是否已经找到表头（防止遇到列表前几行不是表头行）
         try {
@@ -32,7 +33,7 @@ public class DocxParser {
                 List<XWPFTableRow> rows = table.getRows();
                 //读取表格每一行数据
                 for (XWPFTableRow xwpfTableRow : rows) {
-                    DataEntity dataEntity = new DataEntity();
+                    BankPunishment dataEntity = new BankPunishment();
                     //读取每一列数据
                     List<XWPFTableCell> cells = xwpfTableRow.getTableCells();
                     for (int cIndex = 0; cIndex < cells.size(); ++cIndex) {

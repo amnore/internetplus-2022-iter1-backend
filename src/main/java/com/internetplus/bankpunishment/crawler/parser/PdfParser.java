@@ -3,8 +3,9 @@ package com.internetplus.bankpunishment.crawler.parser;
 import com.alibaba.fastjson.JSON;
 import com.internetplus.bankpunishment.crawler.parser.pdfParserPojo.PdfTable;
 import com.internetplus.bankpunishment.crawler.parser.pdfParserPojo.PdfTableCell;
-import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
-import com.internetplus.bankpunishment.crawler.util.pojo.DataFieldHelper;
+import com.internetplus.bankpunishment.crawler.util.DataFieldHelper;
+import com.internetplus.bankpunishment.entity.BankPunishment;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -29,7 +30,7 @@ public class PdfParser {
     /**
      * 给定 pdf 文件对其进行解析，返回 List<DataEntity>
      */
-    public static List<DataEntity> parsePdf2DataEntity(String pdfPath) {
+    public static List<BankPunishment> parsePdf2DataEntity(String pdfPath) {
         // pdf 识别成 jsonString
         String jsonString = parsePdf2Json(pdfPath);
         // System.err.println(jsonString);
@@ -41,8 +42,8 @@ public class PdfParser {
     /**
      * 将解析出来的 tableList 里面的数据抽取出来封装成 List<DataEntity> 进行返回
      */
-    private static List<DataEntity> extractDataEntityFromTableList(List<PdfTable> pdfTableList) {
-        List<DataEntity> dataEntityList = new ArrayList<>(); // 待返回的结果列表
+    private static List<BankPunishment> extractDataEntityFromTableList(List<PdfTable> pdfTableList) {
+        List<BankPunishment> dataEntityList = new ArrayList<>(); // 待返回的结果列表
         List<String> fieldNameList = new ArrayList<>(); // 表头字段的名称列表
         boolean findHeader = false; // 是否已经找到表头
         for (PdfTable pdfTable : pdfTableList) {
@@ -57,7 +58,7 @@ public class PdfParser {
                         }
                     }
                 } else {
-                    DataEntity dataEntity = new DataEntity();
+                    BankPunishment dataEntity = new BankPunishment();
                     // 已经找到表头，接下来每一行都是表格数据
                     for (int cIndex = 0; cIndex < tableRow.size(); ++cIndex) {
                         String value = tableRow.get(cIndex).getText().replaceAll("\r", "");

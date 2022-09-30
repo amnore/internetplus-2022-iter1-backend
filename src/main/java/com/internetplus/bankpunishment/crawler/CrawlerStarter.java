@@ -27,7 +27,7 @@ public class CrawlerStarter {
     /**
      * 启动爬虫，爬取所有数据
      */
-    public static void startCrawler() {
+    public static void startCrawler(int nthreads) {
         // 所有分行的请求，目标是解析所有分支银行的url
         Request branchRequest = new Request("http://www.pbc.gov.cn/rmyh/105226/105442/index.html");
         branchRequest.putExtra("target", PageTarget.BRANCH_LINKS);
@@ -46,7 +46,9 @@ public class CrawlerStarter {
         testRequest = new Request("http://wulumuqi.pbc.gov.cn/wulumuqi/121755/121777/121784/4276742/index.html");
         testRequest.putExtra("target", PageTarget.PUNISHMENT_DETAIL_PAGE);
 
-        int nthreads = Runtime.getRuntime().availableProcessors() * 8;
+        if (nthreads == 0) {
+            nthreads = Runtime.getRuntime().availableProcessors() * 8;
+        }
         logger.info("using {} threads", nthreads);
 
         // 启动

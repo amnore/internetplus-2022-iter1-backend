@@ -1,7 +1,8 @@
 package com.internetplus.bankpunishment.crawler.parser;
 
-import com.internetplus.bankpunishment.crawler.pojo.DataEntity;
-import com.internetplus.bankpunishment.crawler.util.pojo.DataFieldHelper;
+import com.internetplus.bankpunishment.crawler.util.DataFieldHelper;
+import com.internetplus.bankpunishment.entity.BankPunishment;
+
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Range;
@@ -32,8 +33,8 @@ public class DocParser {
      * @param filePath doc 文件的路径
      * @return 返回 DataEntity 的列表
      */
-    public static List<DataEntity> parseExcel2DataEntity(String filePath) {
-        List<DataEntity> dataEntityList = new ArrayList<>(); // 待返回的结果
+    public static List<BankPunishment> parseExcel2DataEntity(String filePath) {
+        List<BankPunishment> dataEntityList = new ArrayList<>(); // 待返回的结果
         List<String> fieldNameList = new ArrayList<>(12); // 表头字段的名称列表
         boolean findHeader = false; // 是否已经找到表头（防止遇到列表前几行不是表头行）
         try {
@@ -46,7 +47,7 @@ public class DocParser {
                 //迭代行
                 for (int rIndex = 0; rIndex < tb.numRows(); rIndex++) {
                     TableRow tr = tb.getRow(rIndex);
-                    DataEntity dataEntity = new DataEntity();
+                    BankPunishment dataEntity = new BankPunishment();
                     //迭代列
                     for (int cIndex = 0; cIndex < tr.numCells(); cIndex++) {
                         String cellText = getTdText(tr.getCell(cIndex));//取得单元格字符串
