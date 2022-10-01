@@ -3,7 +3,7 @@
 <mapper namespace="com.internetplus.bankpunishment.data.CaseStatisticsMapper">
     <select id="getPunishedPartyAndMoney" resultType="java.util.LinkedHashMap">
         select punishedPartyName as 'key', sum(punishmentMoney) as 'value'
-        from case_library
+        from bank_punishment
         group by punishedPartyName
         order by value desc
         limit 10;
@@ -11,7 +11,7 @@
 
     <select id="getPunishedPartyAndTimes" resultType="java.util.LinkedHashMap">
         select punishedPartyName as 'key', count(*) as 'value'
-        from case_library
+        from bank_punishment
         where punishedPartyName is not null and punishedPartyName != ""
         and punishedPartyName != "应桂英" and punishedPartyName != "深圳）有限公司"
         and punishedPartyName != "上海）有限公司" and punishedPartyName != "上海)有限公司"
@@ -22,7 +22,7 @@
 
     <select id="getPunisherNameAndMoney" resultType="java.util.LinkedHashMap">
         select punisherName as 'key', sum(punishmentMoney) as 'value'
-        from case_library
+        from bank_punishment
         group by punisherName
         order by value desc
         limit 10;
@@ -30,7 +30,7 @@
 
     <select id="getPunisherNameAndTimes" resultType="java.util.LinkedHashMap">
         select punisherName as 'key', count(*) as 'value'
-        from case_library
+        from bank_punishment
         group by punisherName
         order by value desc
         limit 10;
@@ -38,7 +38,7 @@
 
     <select id="getPunishDateAndTimes" resultType="java.util.LinkedHashMap">
         select punishDate as 'key', count(*) as 'value'
-        from case_library
+        from bank_punishment
         group by punishDate
         order by value desc
         limit 10;
@@ -46,13 +46,13 @@
 
     <select id="getYearAndAverageMoney" parameterType="java.lang.String" resultType="java.lang.Double">
         select sum(punishmentMoney)/count(*)
-        from case_library
+        from bank_punishment
         where punishDate like concat(#{year,jdbcType=VARCHAR},'%');
     </select>
 
     <select id="getProvinceAndTimes" resultType="java.util.LinkedHashMap">
         select province as 'key', count(*) as 'value'
-        from case_library
+        from bank_punishment
         group by province
         order by value desc;
     </select>
