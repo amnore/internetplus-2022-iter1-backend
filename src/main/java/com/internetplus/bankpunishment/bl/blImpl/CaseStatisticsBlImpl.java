@@ -13,8 +13,8 @@ public class CaseStatisticsBlImpl implements CaseStatisticsBl {
     @Autowired
     CaseStatisticsMapper caseStatisticsMapper;
 
-    private static final Integer startYear = 2015;
-    private static final Integer endYear = 2021;
+    private static final Integer startYear = 2014;
+    private static final Integer endYear = 2022;
 
     @Override
     public LinkedHashMap<String, Double> getCasesPunishedPartyAndMoney(){

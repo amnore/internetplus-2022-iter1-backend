@@ -45,7 +45,6 @@ public class BankPunishmentController {//解决方案：①另设string字段②
 
     private final Integer defaultPageSize = 20;
     private final Integer defaultPageNo = 0;
-    private final Integer currentYear = 2021;
 
     @PostMapping("/insert")//发布状态由系统录入，即新建时一律尚未发布，前端传的state字段无用
     public ResultVO insertBankPunishment(@RequestBody BankPunishment bankPunishment) {
@@ -212,7 +211,7 @@ public class BankPunishmentController {//解决方案：①另设string字段②
 
         try{
             BankPunishmentQueryVO queryDate = new BankPunishmentQueryVO();
-            for (int i=2016; i<=currentYear; i++) {
+            for (int i=2010; i<=2022; i++) {
                 queryDate.setPunishDate(String.valueOf(i));
                 punishDateStastics.put(i, bankPunishmentBl.selectBankPunishment(queryDate).size());
             }
