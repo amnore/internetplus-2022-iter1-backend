@@ -23,4 +23,8 @@ public interface CaseStatisticsBl {
     LinkedHashMap<String, Double> getCasesYearAndAverageMoney();
 
     LinkedHashMap<String, Integer> getCasesProvinceAndTimes();
+
+    LinkedHashMap<String, Integer> getCasesYearAndTimes();
+
+    LinkedHashMap<String, Integer> getCasesMoneyDistribution();
 }

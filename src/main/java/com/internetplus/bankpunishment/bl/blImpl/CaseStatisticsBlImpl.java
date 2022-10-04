@@ -64,6 +64,27 @@ public class CaseStatisticsBlImpl implements CaseStatisticsBl {
         return listToIntegerHashmap(list);
     }
 
+    @Override
+    public LinkedHashMap<String, Integer> getCasesYearAndTimes() {
+        // TODO implement this
+        LinkedHashMap<String, Integer> list = new LinkedHashMap<>();
+        list.put("2018", 1);
+        list.put("2019", 2);
+        list.put("2020", 3);
+        return list;
+    }
+
+    @Override
+    public LinkedHashMap<String, Integer> getCasesMoneyDistribution() {
+        // TODO implement this
+        LinkedHashMap<String, Integer> list = new LinkedHashMap<>();
+        list.put("<10000", 1);
+        list.put("10000-20000", 2);
+        list.put("20000-30000", 3);
+        list.put(">=30000", 4);
+        return list;
+    }
+
     private LinkedHashMap<String, Integer> listToIntegerHashmap(List<LinkedHashMap<String, Object>> list) {
         LinkedHashMap<String, Integer> resultMap = new LinkedHashMap<>();
 

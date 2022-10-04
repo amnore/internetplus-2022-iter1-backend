@@ -115,4 +115,30 @@ public class CaseStastisticsController {
             return ApiResult.fail(e.getMessage());
         }
     }
+
+    @GetMapping("/YearAndTimes")
+    public ApiResult<CaseResultVO> getCasesYearAndTimes() {
+        LinkedHashMap<String, Integer> map;
+
+        try {
+            map = caseStatisticsBl.getCasesYearAndTimes();
+            CaseResultVO result = new CaseResultVO(null, map);
+            return ApiResult.success(result);
+        } catch (Exception e) {
+            return ApiResult.fail(e.getMessage());
+        }
+    }
+
+    @GetMapping("/MoneyDistribution")
+    public ApiResult<CaseResultVO> getCasesMoneyDistribution() {
+        LinkedHashMap<String, Integer> map;
+
+        try {
+            map = caseStatisticsBl.getCasesMoneyDistribution();
+            CaseResultVO caseResultVO = new CaseResultVO(null, map);
+            return ApiResult.success(caseResultVO);
+        } catch (Exception e) {
+            return ApiResult.fail(e.getMessage());
+        }
+    }
 }
