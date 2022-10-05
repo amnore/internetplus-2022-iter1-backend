@@ -56,4 +56,16 @@
         group by province
         order by value desc;
     </select>
+
+    <select id="getTimesByYear" resultType="java.lang.Integer">
+        select count(*)
+        from bank_punishment
+        where punishDate like concat(#{year.toString(),jdbcType=VARCHAR},'-%');
+    </select>
+
+    <select id="getTimesByMoneyRange" resultType="java.lang.Integer">
+        select count(*)
+        from bank_punishment
+        where punishmentMoney >= #{begin,jdbcType=DOUBLE} and punishmentMoney &lt; #{end,jdbcType=DOUBLE};
+    </select>
 </mapper>

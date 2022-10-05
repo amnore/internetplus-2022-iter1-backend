@@ -48,4 +48,7 @@ public interface CaseStatisticsMapper {
      * 省份/次数
      */
     List<LinkedHashMap<String, Object>> getProvinceAndTimes();
+
+    Integer getTimesByYear(Integer year);
+    Integer getTimesByMoneyRange(Double begin, Double end);
 }
