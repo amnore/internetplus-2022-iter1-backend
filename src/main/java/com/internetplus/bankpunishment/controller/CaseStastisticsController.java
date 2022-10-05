@@ -141,4 +141,17 @@ public class CaseStastisticsController {
             return ApiResult.fail(e.getMessage());
         }
     }
+
+    @GetMapping("/Overall")
+    public ApiResult<CaseResultVO> getOverallStatistics() {
+        LinkedHashMap<String, Integer> map;
+
+        try {
+            map = caseStatisticsBl.getOverallStatistics();
+            CaseResultVO caseResultVO = new CaseResultVO(null, map);
+            return ApiResult.success(caseResultVO);
+        } catch (Exception e) {
+            return ApiResult.fail(e.getMessage());
+        }
+    }
 }

@@ -27,4 +27,6 @@ public interface CaseStatisticsBl {
     LinkedHashMap<String, Integer> getCasesYearAndTimes();
 
     LinkedHashMap<String, Integer> getCasesMoneyDistribution();
+
+    LinkedHashMap<String, Integer> getOverallStatistics();
 }

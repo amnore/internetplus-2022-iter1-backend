@@ -51,4 +51,7 @@ public interface CaseStatisticsMapper {
 
     Integer getTimesByYear(Integer year);
     Integer getTimesByMoneyRange(Double begin, Double end);
+
+    Integer countCases();
+    Double sumMoney();
 }

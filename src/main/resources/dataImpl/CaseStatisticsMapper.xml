@@ -68,4 +68,14 @@
         from bank_punishment
         where punishmentMoney >= #{begin,jdbcType=DOUBLE} and punishmentMoney &lt; #{end,jdbcType=DOUBLE};
     </select>
+
+    <select id="countCases" resultType="java.lang.Integer">
+        select count(*)
+        from bank_punishment;
+    </select>
+
+    <select id="sumMoney" resultType="java.lang.Double">
+        select sum(punishmentMoney)
+        from bank_punishment;
+    </select>
 </mapper>

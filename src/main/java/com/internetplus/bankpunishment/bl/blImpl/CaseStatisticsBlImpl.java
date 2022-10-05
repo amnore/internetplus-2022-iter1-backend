@@ -97,6 +97,14 @@ public class CaseStatisticsBlImpl implements CaseStatisticsBl {
         return list;
     }
 
+    @Override
+    public LinkedHashMap<String, Integer> getOverallStatistics() {
+        LinkedHashMap<String, Integer> list = new LinkedHashMap<>();
+        list.put("totalCases", caseStatisticsMapper.countCases());
+        list.put("totalMoneyInTenThousands", (int)(caseStatisticsMapper.sumMoney() / 10000));
+        return list;
+    }
+
     private LinkedHashMap<String, Integer> listToIntegerHashmap(List<LinkedHashMap<String, Object>> list) {
         LinkedHashMap<String, Integer> resultMap = new LinkedHashMap<>();
 
