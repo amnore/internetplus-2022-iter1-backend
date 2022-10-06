@@ -39,6 +39,7 @@
     <select id="getPunishDateAndTimes" resultType="java.util.LinkedHashMap">
         select punishDate as 'key', count(*) as 'value'
         from bank_punishment
+        where punishDate != '1899-12-31'
         group by punishDate
         order by value desc
         limit 10;
