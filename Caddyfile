@@ -1,0 +1,11 @@
+:8080 {
+  log {
+    level INFO
+  }
+
+  root * ../internetplus2022-iter1-frontend
+
+  reverse_proxy /api/* localhost:8081
+  file_server
+}
+
