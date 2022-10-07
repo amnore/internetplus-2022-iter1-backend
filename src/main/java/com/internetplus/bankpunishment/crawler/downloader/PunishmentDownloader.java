@@ -12,6 +12,7 @@ import us.codecraft.webmagic.selector.PlainText;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -34,12 +35,14 @@ public class PunishmentDownloader implements Downloader {
     public static final ThreadLocal<RemoteWebDriver> driver = ThreadLocal.withInitial(() -> {
         // 添加chrome的配置信息
         ChromeOptions chromeOptions = new ChromeOptions();
+        Map<String, Object> options = new HashMap<>();
+        options.put("download.default_directory", downloadPath);
+        options.put("download.prompt_for_download", false);
+        options.put("download.directory_upgrade", true);
+        options.put("plugins.always_open_pdf_externally", true);
         // 设置为无头模式
         chromeOptions.addArguments("--headless", "--window-size=800,600", "--disable-gpu");
-        chromeOptions.setExperimentalOption("prefs",
-                Map.ofEntries(Map.entry("download.default_directory", downloadPath),
-                        Map.entry("download.prompt_for_download", false), Map.entry("download.directory_upgrade", true),
-                        Map.entry("plugins.always_open_pdf_externally", true)));
+        chromeOptions.setExperimentalOption("prefs", options);
         // 使用配置信息 创建driver对象
         return new ChromeDriver(chromeOptions);
     });
