@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.Html;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -35,9 +37,14 @@ public class PunishmentDetailPageHandler implements ProcessHandler {
 
     static final Logger logger = LoggerFactory.getLogger(PunishmentDetailPageHandler.class);
 
-    static final Map<String, Function<String, List<BankPunishment>>> parseFunc = Map.ofEntries(Map.entry(".xls", ExcelParser::parseExcel2DataEntity),
-                Map.entry(".doc", DocParser::parseExcel2DataEntity), Map.entry(".docx", DocxParser::parseExcel2DataEntity),
-                Map.entry(".pdf", PdfParser::parsePdf2DataEntity));
+    static final Map<String, Function<String, List<BankPunishment>>> parseFunc = new HashMap<>();
+
+    static {
+        parseFunc.put(".xls", ExcelParser::parseExcel2DataEntity);
+        parseFunc.put(".doc", DocParser::parseExcel2DataEntity);
+        parseFunc.put(".docx", DocxParser::parseExcel2DataEntity);
+        parseFunc.put(".pdf", PdfParser::parsePdf2DataEntity);
+    }
 
     @Autowired
     public void setBankPunishmentBl(BankPunishmentBl bankPunishmentBl) {
