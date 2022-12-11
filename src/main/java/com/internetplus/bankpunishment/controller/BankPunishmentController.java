@@ -151,56 +151,15 @@ public class BankPunishmentController {//解决方案：①另设string字段②
 
     @PostMapping("/query")
     public ApiResult<BankPunishmentPageVO> queryBankPunishment(@RequestBody BankPunishmentQueryVO query) {
-        String queryString = query.getQueryString();
-        Integer pageSize = query.getPageSize()==null?defaultPageSize: query.getPageSize();
-        Integer pageNO = query.getPageNO()==null?defaultPageNo: query.getPageNO();
-
-        System.out.println("query:"+queryString+";size:"+pageSize+";no:"+pageNO);
-        try {
-            List<BankPunishment> bankPunishments;
-
-            if(queryString==null){//搜索关键字为空，则只是筛选的模式
-                bankPunishments = bankPunishmentBl.selectBankPunishment(query);
-            }else{
-                boolean queryOnly = query.conditionAllNull();
-                if(queryOnly){//搜索关键字不为空，筛选条件全null，则只是模糊搜索的模式
-                    bankPunishments = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
-                }else {//模糊搜索和筛选结合，有取并集和取交集两种方案，目前取交集
-//                    System.out.println("search with condition");
-                    //取并集
-//                    List<BankPunishment> bankPunishmentsFromQuery = bankPunishmentBl.selectBankPunishmentByFuzzyQuery(queryString);
-//                    List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
-//
-//                    bankPunishments = Stream.of(bankPunishmentsFromQuery, bankPunishmentsFromSelect)
-//                            .flatMap(Collection::stream)
-//                            .distinct()
-//                            .collect(Collectors.toList());
-
-                    //取交集
-                    List<BankPunishment> bankPunishmentsFromSelect = bankPunishmentBl.selectBankPunishment(query);
-                    Pattern pattern = Pattern.compile(queryString,Pattern.CASE_INSENSITIVE);
-                    bankPunishments = bankPunishmentsFromSelect.stream().filter(b->pattern.matcher(b.connectAllCondition()).find()).collect(Collectors.toList());
-                }
-
-            }
-
-            //将结果集分页，并包装成页对象
-            int max=bankPunishments.size();
-            List<BankPunishment> resList = new ArrayList<>();
-            if(max!=0) {
-                int fromIndex = pageNO * pageSize;
-                int toIndex = (pageNO+1) * pageSize;
-                if (fromIndex >= max) {
-                    throw new Exception("pageNO overflow");
-                } else{
-                    resList = bankPunishments.subList(fromIndex, Math.min(toIndex, max));
-                }
-            }
-            BankPunishmentPageVO bankPunishmentPageVO = new BankPunishmentPageVO(max,resList);
-            return ApiResult.success(bankPunishmentPageVO);
-        } catch (Exception e) {
-            return ApiResult.fail(e.getMessage());
+        if (query.getLimit() == null) {
+            query.setLimit(20);
         }
+        if (query.getOffset() == null) {
+            query.setOffset(0);
+        }
+
+        List<BankPunishment> bankPunishments = bankPunishmentBl.selectBankPunishment(query);
+        return ApiResult.success(new BankPunishmentPageVO(bankPunishments.size(), bankPunishments));
     }
 
     @GetMapping("/statistics")

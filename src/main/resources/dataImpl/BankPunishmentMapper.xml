@@ -118,7 +118,7 @@
         select * from bank_punishment limit #{limitNum} offset #{offsetNum}
     </select>
 
-    <select id="selectBankPunishment" parameterType="com.internetplus.bankpunishment.entity.BankPunishment" resultMap="BankPunishment">
+    <select id="selectBankPunishment" parameterType="com.internetplus.bankpunishment.vo.BankPunishmentQueryVO" resultMap="BankPunishment">
         select * from bank_punishment
         <trim prefix="where" suffixOverrides="and">
             <if test="id!=null">id=#{id} and</if>
@@ -167,6 +167,8 @@
                 punishedBusinessName like concat('%',#{punishedBusinessName,jdbcType=VARCHAR},'%') and
             </if>
         </trim>
+        limit #{limit,jdbcType=INTEGER}
+        offset #{offset,jdbcType=INTEGER}
     </select>
 
     <resultMap id="BankPunishment" type="com.internetplus.bankpunishment.entity.BankPunishment">

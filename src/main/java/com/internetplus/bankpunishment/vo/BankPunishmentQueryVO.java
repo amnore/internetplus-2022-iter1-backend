@@ -18,15 +18,8 @@ public class BankPunishmentQueryVO {
      */
     private String queryString;
 
-    /**
-     * 页大小
-     */
-    private Integer pageSize;
-
-    /**
-     * 页码
-     */
-    private Integer pageNO;
+    private Integer limit;
+    private Integer offset;
 
     @JSONField(serializeUsing = ToStringSerializer.class)//使用fastjson自动转化long和string
     private Long id;

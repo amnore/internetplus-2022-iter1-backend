@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.internetplus.bankpunishment.data.ArticleMapper">
+    <select id="getArticles" resultMap="ArticlePO">
+        select * from internal_regulation;
+    </select>
+
+    <resultMap id="ArticlePO" type="com.internetplus.bankpunishment.po.ArticlePO">
+        <result column="department" property="department"/>
+        <result column="regulation" property="regulation"/>
+        <result column="chapter" property="chapter"/>
+        <result column="article" property="article"/>
+        <result column="regulation_text" property="text"/>
+    </resultMap>
+</mapper>
